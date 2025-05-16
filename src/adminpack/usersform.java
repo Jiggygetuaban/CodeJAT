@@ -475,6 +475,8 @@ public class usersform extends javax.swing.JFrame {
         createUserForm cuf = new createUserForm();
         cuf.setVisible(true);
         this.dispose();   
+       cuf.remove.setEnabled(false);
+       cuf.select.setEnabled(true);
     }//GEN-LAST:event_addMouseClicked
 
     /**
