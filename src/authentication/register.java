@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package register;
+package authentication;
 
 import config.dbConnectors;
 import java.security.MessageDigest;
@@ -11,7 +11,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import login.login;
+import authentication.login;
 
 /**
  *
@@ -94,19 +94,25 @@ public class register extends javax.swing.JFrame {
         lname = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         email = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        role = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
         ps = new javax.swing.JPasswordField();
+        register = new javax.swing.JLabel();
+        cancel = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        role = new javax.swing.JComboBox<>();
+        showpass = new javax.swing.JCheckBox();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
 
         jLabel8.setText("jLabel8");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(241, 207, 84));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -116,7 +122,7 @@ public class register extends javax.swing.JFrame {
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         uname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jPanel2.add(uname, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 230, 30));
+        jPanel2.add(uname, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, 260, 30));
 
         fname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         fname.addActionListener(new java.awt.event.ActionListener() {
@@ -124,11 +130,12 @@ public class register extends javax.swing.JFrame {
                 fnameActionPerformed(evt);
             }
         });
-        jPanel2.add(fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 85, 230, 30));
+        jPanel2.add(fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 260, 30));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Sign Up");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, -1, -1));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 350, -1));
 
         lname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         lname.addActionListener(new java.awt.event.ActionListener() {
@@ -136,59 +143,110 @@ public class register extends javax.swing.JFrame {
                 lnameActionPerformed(evt);
             }
         });
-        jPanel2.add(lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 230, 30));
+        jPanel2.add(lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 260, 30));
 
         jLabel2.setText("First Name:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, -1, -1));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, -1, 20));
 
         jLabel3.setText("Last Name:");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 116, -1, 20));
-
-        jLabel4.setText("Role:");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 320, -1, -1));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, 20));
 
         email.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jPanel2.add(email, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 230, 30));
+        jPanel2.add(email, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 260, 30));
 
         jLabel5.setText("Email:");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, -1, 20));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, -1, 20));
 
         jLabel6.setText("Username:");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, -1, -1));
-
-        role.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "User" }));
-        jPanel2.add(role, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 230, 30));
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, -1, 20));
 
         jLabel7.setText("Password:");
-        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, -1, -1));
-
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton2.setText("Sign Up");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 390, -1, -1));
-
-        jLabel9.setForeground(new java.awt.Color(0, 153, 255));
-        jLabel9.setText("Already have an account?");
-        jLabel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel9MouseClicked(evt);
-            }
-        });
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 380, -1, -1));
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 320, -1, 20));
 
         ps.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 psActionPerformed(evt);
             }
         });
-        jPanel2.add(ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, 230, 30));
+        jPanel2.add(ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 260, 30));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 40, 310, 430));
+        register.setBackground(new java.awt.Color(255, 153, 102));
+        register.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        register.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        register.setText("SIGN UP");
+        register.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        register.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        register.setOpaque(true);
+        register.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                registerMouseClicked(evt);
+            }
+        });
+        jPanel2.add(register, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 400, 100, 30));
+
+        cancel.setBackground(new java.awt.Color(255, 153, 102));
+        cancel.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        cancel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        cancel.setText("CANCEL");
+        cancel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        cancel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cancel.setOpaque(true);
+        cancel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cancelMouseClicked(evt);
+            }
+        });
+        jPanel2.add(cancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 400, 100, 30));
+
+        jLabel4.setText("Role:");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 50, 20));
+
+        role.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        role.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "User" }));
+        jPanel2.add(role, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 260, 30));
+
+        showpass.setBackground(new java.awt.Color(255, 255, 255));
+        showpass.setText("View password");
+        showpass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showpassActionPerformed(evt);
+            }
+        });
+        jPanel2.add(showpass, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, 250, 20));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 350, 450));
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 60)); // NOI18N
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel12.setText("JOB");
+        jLabel12.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel12.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 190, 290, 100));
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel13.setText("APPLICATION TRACKER");
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 260, 330, -1));
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setText("—");
+        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel9MouseClicked(evt);
+            }
+        });
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 10, 50, -1));
+
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setText("X");
+        jLabel14.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel14MouseClicked(evt);
+            }
+        });
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 10, 50, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -201,7 +259,7 @@ public class register extends javax.swing.JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        setSize(new java.awt.Dimension(914, 557));
+        setSize(new java.awt.Dimension(898, 518));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
     
@@ -213,30 +271,24 @@ public class register extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_lnameActionPerformed
 
-    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        login lg = new login();
-        lg.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jLabel9MouseClicked
+    private void psActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_psActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_psActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
-        if (fname.getText().isEmpty() || lname.getText().isEmpty() || email.getText().isEmpty() || uname.getText().isEmpty() || ps.getText().isEmpty()) {
+    private void registerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerMouseClicked
+         if (fname.getText().isEmpty() || lname.getText().isEmpty() || email.getText().isEmpty() || uname.getText().isEmpty() || ps.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "All Fields are required!");
-            return;
         } else if (ps.getText().length() < 8) {
             JOptionPane.showMessageDialog(null, "Password must be 8 characters above!");
             ps.setText("");
-            return;
         } else if (duplicatedChecker()) {
             System.out.println("Duplicate Exist");
-            return;
         } else {
             dbConnectors dbc = new dbConnectors();
             String hashedPass = hashPassword(ps.getText());
-            String query = "INSERT INTO tbl_users (u_fname, u_lname, u_email, u_username, u_password, u_role, u_status) "
+            String query = "INSERT INTO tbl_users (u_fname, u_lname, u_email, u_username, u_password, u_role, u_status,u_image) "
                     + "VALUES ('" + fname.getText() + "','" + lname.getText() + "','" + email.getText() + "','" 
-                    + uname.getText() + "','" + hashedPass + "','" + role.getSelectedItem() + "','Inactive')";
+                    + uname.getText() + "','" + hashedPass + "','" + role.getSelectedItem() + "','Inactive',' ')";
             if (dbc.insertData(query)) {
                 JOptionPane.showMessageDialog(null, "Inserted Successfully!");
                 login lg = new login();
@@ -247,12 +299,29 @@ public class register extends javax.swing.JFrame {
             }
         }
     
-     
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_registerMouseClicked
 
-    private void psActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_psActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_psActionPerformed
+    private void cancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelMouseClicked
+        login lgn = new login();
+        lgn.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_cancelMouseClicked
+
+    private void showpassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showpassActionPerformed
+        if(showpass.isSelected()){
+            ps.setEchoChar((char)0);
+        }  else {
+            ps.setEchoChar('*');
+        }
+    }//GEN-LAST:event_showpassActionPerformed
+
+    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
+        setState(ICONIFIED);
+    }//GEN-LAST:event_jLabel9MouseClicked
+
+    private void jLabel14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel14MouseClicked
+        System.exit(0);       // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel14MouseClicked
 
     /**
      * @param args the command line arguments
@@ -290,10 +359,13 @@ public class register extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel cancel;
     private javax.swing.JTextField email;
     private javax.swing.JTextField fname;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -306,7 +378,9 @@ public class register extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField lname;
     private javax.swing.JPasswordField ps;
+    private javax.swing.JLabel register;
     private javax.swing.JComboBox<String> role;
+    private javax.swing.JCheckBox showpass;
     private javax.swing.JTextField uname;
     // End of variables declaration//GEN-END:variables
 }

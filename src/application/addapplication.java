@@ -1,0 +1,419 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package application;
+
+import static authentication.register.eml;
+import static authentication.register.usrname;
+import com.mysql.jdbc.Statement;
+import config.Session;
+import config.dbConnectors;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
+import javax.swing.table.TableModel;
+import net.proteanit.sql.DbUtils;
+
+/**
+ *
+ * @author acer
+ */
+public class addapplication extends javax.swing.JInternalFrame {
+
+    /**
+     * Creates new form adduser
+     */
+    public addapplication() {
+        initComponents();
+         this.setBorder(javax.swing. BorderFactory.createEmptyBorder(0,0,0,0)); 
+       BasicInternalFrameUI bi = (BasicInternalFrameUI) this.getUI();
+       bi.setNorthPane (null);
+    }
+   
+      public static int aid,jid;
+    
+     public boolean getids(){ 
+       dbConnectors dbc = new dbConnectors();
+     try {    
+             
+        String querylname = "SELECT * FROM tbl_applicants WHERE a_lname = '" + lname.getText() + "'";
+        String queryjob = "SELECT * FROM tbl_jobs WHERE j_name = '" + jobname.getText() + "'";
+        ResultSet rslname = dbc.getData(querylname);
+        ResultSet rsjob = dbc.getData(queryjob);
+        boolean valid = true;
+
+        if (rslname.next()) {
+            aid = rslname.getInt("a_id");
+        } else {
+            
+            valid = false;
+        }
+
+        if (rsjob.next()) {
+            jid = rsjob.getInt("j_id");
+        } else {
+            
+            valid = false;
+        }
+
+
+        return valid;
+        } catch (SQLException ex) {
+            System.out.println(""+ex);
+            return false;
+        }    
+    }
+     
+      public String status = "Incomplete";
+      public void displayapplicants(){
+        try{
+            dbConnectors dbc = new dbConnectors();
+            ResultSet rs = dbc.getData("SELECT a_id, a_lname, a_status FROM tbl_applicants WHERE a_status = '"+status+"'");
+            applicantstable.setModel(DbUtils.resultSetToTableModel(rs));
+             rs.close();
+        }catch(SQLException ex){
+            System.out.println("Errors: "+ex.getMessage());
+
+        }
+        
+    }   public String jstatus = "Available";
+       public void displayjobs(){
+        try{
+            dbConnectors dbc = new dbConnectors();
+            ResultSet rs = dbc.getData("SELECT j_id, j_name, j_status FROM tbl_jobs WHERE j_status = '"+ jstatus +"'");
+            jobstable.setModel(DbUtils.resultSetToTableModel(rs));
+             rs.close();
+        }catch(SQLException ex){
+            System.out.println("Errors: "+ex.getMessage());
+
+        }
+        
+    }
+    
+       public void addapplication(){
+         try{
+         
+         Session sess = Session.getInstance();   
+         dbConnectors dbc = new dbConnectors(); 
+         if (getids()){
+            
+           
+          int lastInsertedId = -1;
+            String sql = "INSERT INTO tbl_applications(app_uid, app_aid, app_jid, status, date) VALUES (?,?,?,?,?)";
+                PreparedStatement pst = dbc.connect.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                pst.setInt(1, sess.getUid());
+                pst.setInt(2,aid);
+                pst.setInt(3,jid );
+                pst.setString(4, "Pending");
+                pst.setString(5, LocalDateTime.now().toString());
+                
+              int affectedRows = pst.executeUpdate();
+    
+          if (affectedRows > 0) {
+        // Now retrieve the generated key
+        try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                lastInsertedId = generatedKeys.getInt(1);
+            }
+        } 
+        String stats = "Completed";
+        dbc.updateData("UPDATE tbl_applicants SET a_status = '"+stats+"' WHERE a_id = '"+aid+"'");
+        String actionn = "Added job application with ID No.: " + lastInsertedId;
+        dbc.insertData("INSERT INTO tbl_logs(user_id, action, date) VALUES ('" + sess.getUid() + "', '" + actionn + "', '" + LocalDateTime.now() + "')");
+        id.setText("");
+        lname.setText("");
+        jobname.setText("");
+        
+    } else {
+        JOptionPane.showMessageDialog(null, "Adding application failed, no rows affected.");
+    }}} catch (SQLException ex) {
+                    Logger.getLogger(addapplication.class.getName()).log(Level.SEVERE, null, ex);
+                }
+    
+        
+        }
+     // 🔐 Password Hashing Function
+    
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        id = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jobname = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        lname = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        add = new javax.swing.JButton();
+        CLEAR = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        applicantstable = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jobstable = new javax.swing.JTable();
+        selectjob = new javax.swing.JButton();
+        selectapp = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+
+        setBackground(new java.awt.Color(255, 252, 239));
+        setBorder(null);
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameActivated(evt);
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameOpened(evt);
+            }
+        });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setBackground(new java.awt.Color(255, 252, 239));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel2.setBackground(new java.awt.Color(255, 252, 239));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        id.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        id.setEnabled(false);
+        id.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                idActionPerformed(evt);
+            }
+        });
+        jPanel2.add(id, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 230, 30));
+
+        jLabel2.setText(" ID:");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 60, 20));
+
+        jobname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jPanel2.add(jobname, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 230, 30));
+
+        jLabel5.setText("Job name:");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 80, 20));
+
+        lname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        lname.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lnameActionPerformed(evt);
+            }
+        });
+        jPanel2.add(lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 230, 30));
+
+        jLabel9.setText("Last Name:");
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 80, 20));
+
+        add.setBackground(new java.awt.Color(255, 255, 255));
+        add.setText("ADD");
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
+        jPanel2.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 30, 110, -1));
+
+        CLEAR.setBackground(new java.awt.Color(255, 255, 255));
+        CLEAR.setText("CLEAR");
+        CLEAR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CLEARActionPerformed(evt);
+            }
+        });
+        jPanel2.add(CLEAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 60, 110, -1));
+
+        applicantstable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(applicantstable);
+
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 300, 160));
+
+        jobstable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane2.setViewportView(jobstable);
+
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 210, 310, 160));
+
+        selectjob.setText("SELECT");
+        selectjob.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectjobActionPerformed(evt);
+            }
+        });
+        jPanel2.add(selectjob, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 380, 130, -1));
+
+        selectapp.setText("SELECT");
+        selectapp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectappActionPerformed(evt);
+            }
+        });
+        jPanel2.add(selectapp, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, 130, -1));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("JOBS TABLE");
+        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 180, 310, 30));
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("APPLICANTS TABLE");
+        jLabel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 300, 30));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 670, 410));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 440));
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
+        
+    }//GEN-LAST:event_formInternalFrameOpened
+
+    private void CLEARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CLEARActionPerformed
+        id.setText("");
+        lname.setText("");      
+        jobname.setText("");
+        
+    }//GEN-LAST:event_CLEARActionPerformed
+
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+        Session sess = Session.getInstance();
+         dbConnectors dbc = new dbConnectors();
+        if (lname.getText().isEmpty() || jobname.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "All Fields are required!");
+        }  else {
+              addapplication();
+           
+           
+        }
+    }//GEN-LAST:event_addActionPerformed
+
+    private void lnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lnameActionPerformed
+
+    private void idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_idActionPerformed
+
+    private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
+        displayjobs();
+        displayapplicants();
+    }//GEN-LAST:event_formInternalFrameActivated
+
+    private void selectappActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectappActionPerformed
+         int rowIndex = applicantstable.getSelectedRow();
+
+        if (rowIndex < 0) {
+            JOptionPane.showMessageDialog(null, "Please select an applicant!");
+        } else {
+            try {
+                dbConnectors dbc = new dbConnectors();
+                TableModel tbl = applicantstable.getModel();
+                ResultSet rs = dbc.getData("SELECT * FROM tbl_applicants WHERE a_id = '" + tbl.getValueAt(rowIndex, 0) + "'");
+
+       if (rs.next()) {
+                 lname.setText(""+rs.getString("a_lname"));
+            }
+            } catch (SQLException ex) {
+                System.out.println("" + ex);
+            }
+        }
+    }//GEN-LAST:event_selectappActionPerformed
+
+    private void selectjobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectjobActionPerformed
+         int rowIndex = jobstable.getSelectedRow();
+
+        if (rowIndex < 0) {
+            JOptionPane.showMessageDialog(null, "Please select a job!");
+        } else {
+            try {
+                dbConnectors dbc = new dbConnectors();
+                TableModel tbl = jobstable.getModel();
+                ResultSet rs = dbc.getData("SELECT * FROM tbl_jobs WHERE j_id = '" + tbl.getValueAt(rowIndex, 0) + "'");
+
+       if (rs.next()) {
+                 jobname.setText(""+rs.getString("j_name"));
+            }
+            } catch (SQLException ex) {
+                System.out.println("" + ex);
+            }
+        }
+    }//GEN-LAST:event_selectjobActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton CLEAR;
+    private javax.swing.JButton add;
+    private javax.swing.JTable applicantstable;
+    private javax.swing.JTextField id;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField jobname;
+    private javax.swing.JTable jobstable;
+    private javax.swing.JTextField lname;
+    private javax.swing.JButton selectapp;
+    private javax.swing.JButton selectjob;
+    // End of variables declaration//GEN-END:variables
+}

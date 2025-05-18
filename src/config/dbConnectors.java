@@ -19,7 +19,7 @@
      */
     public class dbConnectors {
 
-        private Connection connect;
+        public Connection connect;
 
         public dbConnectors(){
                 try{
@@ -65,5 +65,22 @@
                 }
 
             }
+            
+             public void deleteData(String sql) {
+        try {
+            PreparedStatement pst = connect.prepareStatement(sql);
+            int rowsDeleted = pst.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                JOptionPane.showMessageDialog(null, "Data Deleted Successfully!");
+            } else {
+                System.out.println("No records deleted.");
+            }
+
+            pst.close();
+        } catch (SQLException ex) {
+            System.out.println("Connection Error: " + ex);
+        }
+    }
 
     }
