@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 19, 2025 at 12:24 AM
+-- Generation Time: May 19, 2025 at 08:29 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,9 +44,9 @@ CREATE TABLE `tbl_applicants` (
 --
 
 INSERT INTO `tbl_applicants` (`a_id`, `a_fname`, `a_lname`, `a_email`, `a_contact`, `a_address`, `a_status`, `a_image`, `u_id`) VALUES
-(1, 'sadasd', 'asdasdas', 'dasdasdas', 2222, 'asdasdasdas', 'Incomplete', '', 1),
+(1, 'sadasd', 'asdasdas', 'dasdasdas', 2222, 'asdasdasdas', 'Completed', '', 1),
 (2, 'asdasd', 'adsadasd', 'adsadas', 22121, 'assdasdasdass', 'Completed', '', 1),
-(3, 'aaaass', 'sadasda', 'aaasdsadas', 2121, 'dsadasdsa', 'Incomplete', '', 1);
+(5, 'jiggy', 'getuaban', 'jiggygetuaban@gmail.com', 3333, 'dfsdfsfs', 'Completed', '', 1);
 
 -- --------------------------------------------------------
 
@@ -68,7 +68,9 @@ CREATE TABLE `tbl_applications` (
 --
 
 INSERT INTO `tbl_applications` (`app_id`, `app_uid`, `app_aid`, `app_jid`, `date`, `status`) VALUES
-(1, 1, 2, 2, '2025-05-18T15:22:49.500', 'Pending');
+(1, 1, 2, 2, '2025-05-18T15:22:49.500', 'Approved'),
+(2, 1, 1, 1, '2025-05-18T19:17:31.055', 'Pending'),
+(5, 1, 5, 5, '2025-05-18T23:22:45.173', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -90,7 +92,9 @@ CREATE TABLE `tbl_jobs` (
 
 INSERT INTO `tbl_jobs` (`j_id`, `j_name`, `j_description`, `j_status`, `u_id`) VALUES
 (1, 'dasdssas', 'dasdasdasd', 'Available', 1),
-(2, 'fsdfsd', 'sdfsdfsdfsd', 'Available', 1);
+(2, 'fsdfsd', 'sdfsdfsdfsd', 'Available', 1),
+(4, 'it support', 'dfasfsdf', 'Available', 1),
+(5, 'fdsdfs', 'fsdfsdfsd', 'Available', 1);
 
 -- --------------------------------------------------------
 
@@ -110,7 +114,13 @@ CREATE TABLE `tbl_logs` (
 --
 
 INSERT INTO `tbl_logs` (`l_id`, `action`, `date`, `user_id`) VALUES
-(1, 'Added job application with ID No.: 1', '2025-05-18 15:22:51', 1);
+(1, 'Added job application with ID No.: 1', '2025-05-18 15:22:51', 1),
+(2, 'Added job application with ID No.: 2', '2025-05-18 19:17:32', 1),
+(3, 'Added job application with ID No.: 3', '2025-05-18 22:11:49', 1),
+(4, 'Added job application with ID No.: 4', '2025-05-18 22:15:19', 1),
+(5, 'Created user account ID: 3', '2025-05-18 23:10:38', 1),
+(6, 'Created user account ID: 5', '2025-05-18 23:10:59', 1),
+(7, 'Added job application with ID No.: 5', '2025-05-18 23:22:46', 1);
 
 -- --------------------------------------------------------
 
@@ -135,7 +145,8 @@ CREATE TABLE `tbl_users` (
 --
 
 INSERT INTO `tbl_users` (`u_id`, `u_fname`, `u_lname`, `u_username`, `u_email`, `u_password`, `u_status`, `u_role`, `u_image`) VALUES
-(1, 'jiggy', 'getuaban', 'jiggy', 'jiggy@gmail.com', '15e2b0d3c33891ebb0f1ef609ec419420c20e320ce94c65fbc8c3312448eb225', 'Active', 'Admin', '');
+(1, 'jiggy', 'getuaban', 'jiggy', 'jiggy@gmail.com', '15e2b0d3c33891ebb0f1ef609ec419420c20e320ce94c65fbc8c3312448eb225', 'Active', 'Admin', ''),
+(3, 'dsadas', 'dsadasdas', 'sdasdasd', 'sadasdsad', '2313123213', 'Active', 'Admin', '');
 
 --
 -- Indexes for dumped tables
@@ -185,31 +196,31 @@ ALTER TABLE `tbl_users`
 -- AUTO_INCREMENT for table `tbl_applicants`
 --
 ALTER TABLE `tbl_applicants`
-  MODIFY `a_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `a_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tbl_applications`
 --
 ALTER TABLE `tbl_applications`
-  MODIFY `app_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `app_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tbl_jobs`
 --
 ALTER TABLE `tbl_jobs`
-  MODIFY `j_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `j_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tbl_logs`
 --
 ALTER TABLE `tbl_logs`
-  MODIFY `l_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `l_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `tbl_users`
 --
 ALTER TABLE `tbl_users`
-  MODIFY `u_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `u_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
