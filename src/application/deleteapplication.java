@@ -6,7 +6,7 @@
 package application;
 
 
-import applicant.*;
+
 import config.Session;
 import config.dbConnectors;
 import java.awt.Image;
@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -86,9 +87,13 @@ public class deleteapplication extends javax.swing.JInternalFrame {
      public void displayData(){
         try{
             dbConnectors dbc = new dbConnectors();
-            ResultSet rs = dbc.getData("SELECT a_id, a_lname,a_status FROM tbl_applicants");
+            ResultSet rs = dbc.getData("SELECT tbl_applications.app_id, tbl_applicants.a_lname, tbl_jobs.j_name, "
+             + " tbl_applications.status FROM tbl_applications "
+             + " INNER JOIN tbl_applicants ON tbl_applications.app_aid = tbl_applicants.a_id "
+             + " INNER JOIN tbl_jobs ON tbl_applications.app_jid = tbl_jobs.j_id ");
             applicantstable.setModel(DbUtils.resultSetToTableModel(rs));
              rs.close();
+  
         }catch(SQLException ex){
             System.out.println("Errors: "+ex.getMessage());
 
@@ -96,6 +101,29 @@ public class deleteapplication extends javax.swing.JInternalFrame {
         
     }
      
+      public static int id;
+    
+     public boolean getids(){ 
+       dbConnectors dbc = new dbConnectors();
+     try {    
+             
+        String querylname = "SELECT * FROM tbl_applicants WHERE a_email = '" + email.getText() + "'";
+        
+        ResultSet rslname = dbc.getData(querylname);
+
+        boolean valid = true;
+
+        if (rslname.next()) {
+               id = rslname.getInt("a_id");
+       } else {  
+                valid = false;
+              }
+        return valid;
+        } catch (SQLException ex) {
+            System.out.println(""+ex);
+            return false;
+        }    
+    }
    
     /**
      * This method is called from within the constructor to initialize the form.
@@ -108,24 +136,17 @@ public class deleteapplication extends javax.swing.JInternalFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        contact = new javax.swing.JTextField();
         aid = new javax.swing.JTextField();
-        lname = new javax.swing.JTextField();
+        jname = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         email = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        fname = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         image = new javax.swing.JLabel();
         delete = new javax.swing.JButton();
         CLEAR = new javax.swing.JButton();
         edit = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
-        address = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         applicantstable = new javax.swing.JTable();
 
@@ -157,10 +178,6 @@ public class deleteapplication extends javax.swing.JInternalFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        contact.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        contact.setEnabled(false);
-        jPanel2.add(contact, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 180, 30));
-
         aid.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         aid.setEnabled(false);
         aid.addActionListener(new java.awt.event.ActionListener() {
@@ -168,51 +185,41 @@ public class deleteapplication extends javax.swing.JInternalFrame {
                 aidActionPerformed(evt);
             }
         });
-        jPanel2.add(aid, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 180, 30));
+        jPanel2.add(aid, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 240, 30));
 
-        lname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        lname.setEnabled(false);
-        lname.addActionListener(new java.awt.event.ActionListener() {
+        jname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jname.setEnabled(false);
+        jname.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lnameActionPerformed(evt);
+                jnameActionPerformed(evt);
             }
         });
-        jPanel2.add(lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 180, 30));
+        jPanel2.add(jname, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 240, 30));
 
-        jLabel2.setText("User ID:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, 20));
+        jLabel2.setText(" ID:");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 90, 20));
 
-        jLabel3.setText("Last Name:");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, 20));
+        jLabel3.setText("Job Name:");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, -1, 20));
 
         email.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         email.setEnabled(false);
-        jPanel2.add(email, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 180, 30));
-
-        jLabel5.setText("Email:");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, 20));
-
-        jLabel6.setText("Email");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, -1, 20));
-
-        fname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        fname.setEnabled(false);
-        fname.addActionListener(new java.awt.event.ActionListener() {
+        email.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fnameActionPerformed(evt);
+                emailActionPerformed(evt);
             }
         });
-        jPanel2.add(fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 180, 30));
+        jPanel2.add(email, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 240, 30));
 
-        jLabel9.setText("First Name:");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, 20));
+        jLabel9.setText("Full Name:");
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, -1, 20));
 
         jPanel3.setBackground(new java.awt.Color(153, 153, 153));
         jPanel3.setLayout(null);
         jPanel3.add(image);
-        image.setBounds(0, 0, 130, 120);
+        image.setBounds(0, 0, 150, 130);
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 50, 130, 120));
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 150, 130));
 
         delete.setBackground(new java.awt.Color(255, 255, 255));
         delete.setText("DELETE");
@@ -221,7 +228,7 @@ public class deleteapplication extends javax.swing.JInternalFrame {
                 deleteActionPerformed(evt);
             }
         });
-        jPanel2.add(delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 380, 130, -1));
+        jPanel2.add(delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 380, 130, -1));
 
         CLEAR.setBackground(new java.awt.Color(255, 255, 255));
         CLEAR.setText("CLEAR");
@@ -230,7 +237,7 @@ public class deleteapplication extends javax.swing.JInternalFrame {
                 CLEARActionPerformed(evt);
             }
         });
-        jPanel2.add(CLEAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 350, 130, -1));
+        jPanel2.add(CLEAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 350, 130, -1));
 
         edit.setText("SELECT");
         edit.addActionListener(new java.awt.event.ActionListener() {
@@ -238,23 +245,9 @@ public class deleteapplication extends javax.swing.JInternalFrame {
                 editActionPerformed(evt);
             }
         });
-        jPanel2.add(edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 320, 130, -1));
+        jPanel2.add(edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 320, 130, -1));
 
-        jLabel7.setText("Address:");
-        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, -1, 20));
-
-        address.setEnabled(false);
-        address.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addressActionPerformed(evt);
-            }
-        });
-        jPanel2.add(address, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, 180, 30));
-
-        jLabel8.setText("Contact:");
-        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, -1, 20));
-
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 380, 420));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 300, 420));
 
         applicantstable.setBackground(new java.awt.Color(255, 252, 239));
         applicantstable.setModel(new javax.swing.table.DefaultTableModel(
@@ -268,7 +261,7 @@ public class deleteapplication extends javax.swing.JInternalFrame {
         applicantstable.setGridColor(new java.awt.Color(255, 252, 239));
         jScrollPane1.setViewportView(applicantstable);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 10, 300, 420));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 10, 380, 420));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 440));
 
@@ -279,43 +272,41 @@ public class deleteapplication extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_aidActionPerformed
 
-    private void lnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnameActionPerformed
+    private void jnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jnameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_lnameActionPerformed
+    }//GEN-LAST:event_jnameActionPerformed
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
         Session sess = Session.getInstance();
         dbConnectors dbc = new dbConnectors();
         int cuser = sess.getUid();
         if(aid.getText().isEmpty()){
-        JOptionPane.showMessageDialog(null, "Please select an applicant!");
+        JOptionPane.showMessageDialog(null, "Please select an application!");
         
         }else{
-        dbc.deleteData("DELETE FROM tbl_applicants WHERE a_id = '"+aid.getText()+"'");
-        displayData();
-        fname.setText("");
-       lname.setText("");
-        email.setText("");
-        contact.setText("");
-        
-        image.setIcon(null);
-        destination = "";
-        path = "";
-        //String actionn = "Deleted users with ID No.: " + uid.getText();
-         //   dbc.insertData("INSERT INTO logs(user_id, action, date) VALUES ('" + sess.getUid()+ "', '" + actionn + "', '" + LocalDateTime.now() + "')");
+            if(getids()){
+             dbc.deleteData("DELETE FROM tbl_applications WHERE app_id = '"+aid.getText()+"'");
+            displayData();
+            email.setText("");
+            jname.setText("");  
+            image.setIcon(null);
+            destination = "";
+            path = "";
+            dbc.updateData("UPDATE tbl_applicants SET a_status = 'Incomplete' WHERE a_id = '"+id+"'");
+            String actionn = "Deleted application with ID No.: " + aid.getText();
+            dbc.insertData("INSERT INTO tbl_logs(user_id, action, date) VALUES ('" + sess.getUid() + "', '" + actionn + "', '" + LocalDateTime.now() + "')");
+            }
+       
         }
        
     }//GEN-LAST:event_deleteActionPerformed
 
     private void CLEARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CLEARActionPerformed
-        fname.setText("");
-       lname.setText("");
+        aid.setText("");
         email.setText("");
-        contact.setText("");
-        
+        jname.setText("");
         image.setIcon(null);
-        destination = "";
-        path = "";
+        
      
     }//GEN-LAST:event_CLEARActionPerformed
 
@@ -328,26 +319,18 @@ public class deleteapplication extends javax.swing.JInternalFrame {
             try {
                 dbConnectors dbc = new dbConnectors();
                 TableModel tbl = applicantstable.getModel();
-                ResultSet rs = dbc.getData("SELECT * FROM tbl_applicants WHERE a_id = '" + tbl.getValueAt(rowIndex, 0) + "'");
-
+                ResultSet rs = dbc.getData("SELECT tbl_applications.app_id,tbl_applicants.a_email, tbl_applicants.a_image, tbl_jobs.j_name, "
+             + " tbl_applications.status FROM tbl_applications INNER JOIN tbl_applicants ON tbl_applications.app_aid = tbl_applicants.a_id "
+             + " INNER JOIN tbl_jobs ON tbl_applications.app_jid = tbl_jobs.j_id  WHERE tbl_applications.app_id = '" + tbl.getValueAt(rowIndex, 0) + "'");
                 if (rs.next()) {
-
-                    
-                    aid.setText(""+rs.getInt("a_id"));
-                    fname.setText(""+rs.getString("a_fname"));
-                    lname.setText(""+rs.getString("a_lname"));
-                    contact.setText(""+rs.getString("a_contact"));
+                    aid.setText(""+rs.getInt("app_id"));
                     email.setText(""+rs.getString("a_email"));
-                    address.setText(""+rs.getString("a_address"));
-                    
-                    
+                    jname.setText(""+rs.getString("j_name"));    
                     image.setIcon(ResizeImage(rs.getString("a_image"),null,image));
                     oldpath = rs.getString("a_image");
                     path = rs.getString("a_image");
                     destination = rs.getString("a_image");
-                    
-                    
-                    
+
                 }
 
             } catch (SQLException ex) {
@@ -360,37 +343,26 @@ public class deleteapplication extends javax.swing.JInternalFrame {
         displayData();
     }//GEN-LAST:event_formInternalFrameActivated
 
-    private void fnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fnameActionPerformed
+    private void emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_fnameActionPerformed
-
-    private void addressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addressActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_addressActionPerformed
+    }//GEN-LAST:event_emailActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CLEAR;
-    private javax.swing.JTextField address;
     public javax.swing.JTextField aid;
     private javax.swing.JTable applicantstable;
-    public javax.swing.JTextField contact;
     public javax.swing.JButton delete;
     private javax.swing.JButton edit;
     public javax.swing.JTextField email;
-    public javax.swing.JTextField fname;
     private javax.swing.JLabel image;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    public javax.swing.JTextField lname;
+    public javax.swing.JTextField jname;
     // End of variables declaration//GEN-END:variables
 }

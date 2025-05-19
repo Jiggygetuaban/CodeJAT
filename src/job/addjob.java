@@ -5,8 +5,15 @@
  */
 package job;
 
+import com.mysql.jdbc.Statement;
 import config.Session;
 import config.dbConnectors;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
@@ -155,20 +162,38 @@ public class addjob extends javax.swing.JInternalFrame {
          Session sess = Session.getInstance();  
         if ( description.getText().isEmpty() ||name.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "All Fields are required!");
-        }  else {
-             
+        }  else {   
             dbConnectors dbc = new dbConnectors();
-            boolean inserted = dbc.insertData("INSERT INTO tbl_jobs (j_name, j_description, j_status, u_id) "
-                + "VALUES ('" + name.getText() + "','" + description.getText() + "','" + status.getSelectedItem() + "','"+sess.getUid()+"')");
+            
+             try {
+                 int lastInsertedId = -1;
+            String inserted = "INSERT INTO tbl_jobs (j_name, j_description, j_status, u_id) VALUES (?,?,?,?)";
+            PreparedStatement pst = dbc.connect.prepareStatement(inserted, Statement.RETURN_GENERATED_KEYS);
+                   // Use prepared statements properly with parameters
+                pst.setString(1, name.getText());
+                pst.setString(2, description.getText());
+                pst.setString(3, "Available");
+                pst.setInt(4,sess.getUid() );     
+              int affectedRows = pst.executeUpdate();
+    
+          if (affectedRows > 0) {
+        // Now retrieve the generated key
+        try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                lastInsertedId = generatedKeys.getInt(1);
+            }
+        }
+        String actionn = "Added job with ID: " + lastInsertedId;
+        dbc.insertData("INSERT INTO tbl_logs(user_id, action, date) VALUES ('" + sess.getUid() + "', '" + actionn + "', '" + LocalDateTime.now() + "')");
 
-            if (inserted) {
+            
                 JOptionPane.showMessageDialog(null, "Inserted Successfully!");
                 name.setText("");
                 description.setText("");
-                
-            } else {
-                JOptionPane.showMessageDialog(null, "Connection Error!");
-            }
+          }
+             } catch (SQLException ex) {
+                 Logger.getLogger(addjob.class.getName()).log(Level.SEVERE, null, ex);
+             }     
         }
     }//GEN-LAST:event_addActionPerformed
 

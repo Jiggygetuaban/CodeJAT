@@ -9,15 +9,9 @@ package job;
 
 import config.Session;
 import config.dbConnectors;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
+import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.TableModel;
@@ -212,8 +206,8 @@ public class deletejob extends javax.swing.JInternalFrame {
         status.setSelectedItem("");
         
        
-        //String actionn = "Deleted users with ID No.: " + uid.getText();
-         //   dbc.insertData("INSERT INTO logs(user_id, action, date) VALUES ('" + sess.getUid()+ "', '" + actionn + "', '" + LocalDateTime.now() + "')");
+        String actionn = "Deleted job with ID No.: " + id.getText();
+            dbc.insertData("INSERT INTO tbl_logs(user_id, action, date) VALUES ('" + sess.getUid() + "', '" + actionn + "', '" + LocalDateTime.now() + "')");
         }
        
     }//GEN-LAST:event_deleteActionPerformed

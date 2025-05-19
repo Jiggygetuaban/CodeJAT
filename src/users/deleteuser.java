@@ -5,18 +5,13 @@
  */
 package users;
 
-import static authentication.register.eml;
-import static authentication.register.usrname;
+
 import config.Session;
 import config.dbConnectors;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -298,8 +293,7 @@ public class deleteuser extends javax.swing.JInternalFrame {
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
         Session sess = Session.getInstance();
-        dbConnectors dbc = new dbConnectors();
-        int cuser = sess.getUid();
+        dbConnectors dbc = new dbConnectors(); 
         if(uid.getText().isEmpty()){
         JOptionPane.showMessageDialog(null, "Please select a user!");
         
@@ -314,8 +308,8 @@ public class deleteuser extends javax.swing.JInternalFrame {
         image.setIcon(null);
         destination = "";
         path = "";
-        //String actionn = "Deleted users with ID No.: " + uid.getText();
-         //   dbc.insertData("INSERT INTO logs(user_id, action, date) VALUES ('" + sess.getUid()+ "', '" + actionn + "', '" + LocalDateTime.now() + "')");
+        String actionn = "Deleted user with ID No.: " + uid.getText();
+            dbc.insertData("INSERT INTO tbl_logs(user_id, action, date) VALUES ('" + sess.getUid() + "', '" + actionn + "', '" + LocalDateTime.now() + "')");
         }
        
     }//GEN-LAST:event_deleteActionPerformed

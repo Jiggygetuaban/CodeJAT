@@ -7,10 +7,12 @@ package job;
 
 
 
+import config.Session;
 import config.dbConnectors;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
@@ -187,12 +189,13 @@ public class editjob extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-
+        Session sess = Session.getInstance();
+        dbConnectors dbc = new dbConnectors();
         if ( id.getText().isEmpty() ||name.getText().isEmpty() || description.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "All Fields are required!");
         }else {
             
-            dbConnectors dbc = new dbConnectors();
+            
             boolean inserted = dbc.insertData("UPDATE tbl_jobs SET j_name ='"+name.getText()+"',j_description ='"+description.getText()+"' WHERE j_id ='"+id.getText()+"'");
 
             if (inserted) {
@@ -200,6 +203,8 @@ public class editjob extends javax.swing.JInternalFrame {
                 name.setText("");
                 description.setText("");
                 id.setText("");
+                 String actionn = "Updated job with ID No.: " + id.getText();
+            dbc.insertData("INSERT INTO tbl_logs(user_id, action, date) VALUES ('" + sess.getUid() + "', '" + actionn + "', '" + LocalDateTime.now() + "')");
                 
             } else {
                 JOptionPane.showMessageDialog(null, "Connection Error!");

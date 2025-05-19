@@ -5,31 +5,15 @@
  */
 package application;
 
-import static authentication.register.eml;
-import static authentication.register.usrname;
 import com.mysql.jdbc.Statement;
 import config.Session;
 import config.dbConnectors;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.TableModel;
@@ -226,12 +210,14 @@ public class addapplication extends javax.swing.JInternalFrame {
         jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 60, 20));
 
         jobname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jobname.setEnabled(false);
         jPanel2.add(jobname, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 230, 30));
 
         jLabel5.setText("Job name:");
         jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 80, 20));
 
         lname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        lname.setEnabled(false);
         lname.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lnameActionPerformed(evt);
@@ -398,9 +384,9 @@ public class addapplication extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CLEAR;
-    private javax.swing.JButton add;
+    public javax.swing.JButton add;
     private javax.swing.JTable applicantstable;
-    private javax.swing.JTextField id;
+    public javax.swing.JTextField id;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -410,9 +396,9 @@ public class addapplication extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jobname;
+    public javax.swing.JTextField jobname;
     private javax.swing.JTable jobstable;
-    private javax.swing.JTextField lname;
+    public javax.swing.JTextField lname;
     private javax.swing.JButton selectapp;
     private javax.swing.JButton selectjob;
     // End of variables declaration//GEN-END:variables

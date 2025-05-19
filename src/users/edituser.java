@@ -7,6 +7,7 @@ package users;
 
 import static authentication.register.eml;
 import static authentication.register.usrname;
+import config.Session;
 import config.dbConnectors;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -18,6 +19,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -376,14 +378,14 @@ public class edituser extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_fnameActionPerformed
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-
+         Session sess = Session.getInstance();
+        dbConnectors dbc = new dbConnectors();
         if ( lname.getText().isEmpty() ||fname.getText().isEmpty() || email.getText().isEmpty() || uname.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "All Fields are required!");
         }  else if (duplicatedChecker()) {
             System.out.println("Duplicate Exist");
         } else {
-            
-            dbConnectors dbc = new dbConnectors();
+   
             boolean inserted = dbc.insertData("UPDATE tbl_users SET u_fname ='"+fname.getText()+"',u_lname ='"+lname.getText()+"',"
                 + "u_username ='"+uname.getText()+"',u_email ='"+email.getText()+"',"
                 + "u_role ='"+role.getSelectedItem()+"',u_status ='"+us.getSelectedItem()+"',"
@@ -395,8 +397,9 @@ public class edituser extends javax.swing.JInternalFrame {
                 lname.setText("");
                 email.setText("");
                 uname.setText("");
-                
                image.setIcon(null);
+               String actionn = "Updated user with ID No.: " + uid.getText();
+            dbc.insertData("INSERT INTO tbl_logs(user_id, action, date) VALUES ('" + sess.getUid() + "', '" + actionn + "', '" + LocalDateTime.now() + "')");
             } else {
                 JOptionPane.showMessageDialog(null, "Connection Error!");
             }

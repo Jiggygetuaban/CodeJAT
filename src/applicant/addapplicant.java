@@ -7,6 +7,7 @@ package applicant;
 
 import static authentication.register.eml;
 import static authentication.register.usrname;
+import com.mysql.jdbc.Statement;
 import config.Session;
 import config.dbConnectors;
 import java.awt.Image;
@@ -19,14 +20,19 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
+import job.addjob;
 
 /**
  *
@@ -346,23 +352,43 @@ public class addapplicant extends javax.swing.JInternalFrame {
         } else if (duplicatedChecker()) {
             System.out.println("Duplicate Exist");
         } else {
-             
+              try {
+                 int lastInsertedId = -1;
             dbConnectors dbc = new dbConnectors();
-            boolean inserted = dbc.insertData("INSERT INTO tbl_applicants (a_fname, a_lname, a_email, a_contact, a_address, a_status, a_image, u_id) "
-                + "VALUES ('" + fname.getText() + "','" + lname.getText() + "','" + email.getText() + "','"
-                + contact.getText() + "','" + address.getText() + "','Incomplete','"+destination+"','"+sess.getUid()+"')");
-
-            if (inserted) {
-                JOptionPane.showMessageDialog(null, "Inserted Successfully!");
+            String inserted = "INSERT INTO tbl_applicants (a_fname, a_lname, a_email, a_contact, a_address, a_status, a_image, u_id) VALUES (?,?,?,?,?,?,?,?)";
+            PreparedStatement pst = dbc.connect.prepareStatement(inserted, Statement.RETURN_GENERATED_KEYS);
+                   // Use prepared statements properly with parameters
+                pst.setString(1, fname.getText());
+                pst.setString(2, lname.getText());
+                pst.setString(3, email.getText());
+                pst.setString(4, contact.getText());
+                pst.setString(5, address.getText());
+                pst.setString(6, "Incomplete");
+                pst.setString(7, destination);
+                pst.setInt(8,sess.getUid());
+                    
+              int affectedRows = pst.executeUpdate();
+    
+          if (affectedRows > 0) {
+        // Now retrieve the generated key
+        try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                lastInsertedId = generatedKeys.getInt(1);
+            }
+        }
+        String actionn = "Added applicant with ID: " + lastInsertedId;
+        dbc.insertData("INSERT INTO tbl_logs(user_id, action, date) VALUES ('" + sess.getUid() + "', '" + actionn + "', '" + LocalDateTime.now() + "')");
+        JOptionPane.showMessageDialog(null, "Inserted Successfully!");
                 fname.setText("");
                 lname.setText("");
                 email.setText("");
                 contact.setText("");
                 address.setText("");
-               image.setIcon(null);
-            } else {
-                JOptionPane.showMessageDialog(null, "Connection Error!");
-            }
+               image.setIcon(null);              
+          }         
+             } catch (SQLException ex) {
+                 Logger.getLogger(addapplicant.class.getName()).log(Level.SEVERE, null, ex);
+             }  
         }
     }//GEN-LAST:event_addActionPerformed
 

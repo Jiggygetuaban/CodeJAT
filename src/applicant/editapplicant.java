@@ -7,7 +7,7 @@ package applicant;
 
 
 import static authentication.register.eml;
-import static authentication.register.usrname;
+import config.Session;
 import config.dbConnectors;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -19,6 +19,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -381,6 +382,9 @@ public class editapplicant extends javax.swing.JInternalFrame {
                 contact.setText("");
                 address.setText("");
                image.setIcon(null);
+               Session sess = Session.getInstance();
+                String actionn = "Updated applicant with ID No.: " + aid.getText();
+                dbc.insertData("INSERT INTO tbl_logs(user_id, action, date) VALUES ('" + sess.getUid() + "', '" + actionn + "', '" + LocalDateTime.now() + "')");
             } else {
                 JOptionPane.showMessageDialog(null, "Connection Error!");
             }

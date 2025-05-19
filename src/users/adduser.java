@@ -7,6 +7,8 @@ package users;
 
 import static authentication.register.eml;
 import static authentication.register.usrname;
+import com.mysql.jdbc.Statement;
+import config.Session;
 import config.dbConnectors;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -18,14 +20,19 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
+import job.addjob;
 
 /**
  *
@@ -358,7 +365,7 @@ public class adduser extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_fnameActionPerformed
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-
+        Session sess = Session.getInstance();  
         if ( lname.getText().isEmpty() ||fname.getText().isEmpty() || email.getText().isEmpty() || uname.getText().isEmpty() || ps.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "All Fields are required!");
         } else if (ps.getText().length() < 8) {
@@ -367,24 +374,43 @@ public class adduser extends javax.swing.JInternalFrame {
         } else if (duplicatedChecker()) {
             System.out.println("Duplicate Exist");
         } else {
+            try{
              String hashedPass = hashPassword(ps.getText());
             dbConnectors dbc = new dbConnectors();
-            boolean inserted = dbc.insertData("INSERT INTO tbl_users (u_fname, u_lname, u_email, u_username, u_password, u_role, u_status,u_image) "
-                + "VALUES ('" + fname.getText() + "','" + lname.getText() + "','" + email.getText() + "','"
-                + uname.getText() + "','" + hashedPass + "','" + role.getSelectedItem() + "','" + us.getSelectedItem() + "','"+destination+"')");
-
-            if (inserted) {
-                JOptionPane.showMessageDialog(null, "Inserted Successfully!");
+            int lastInsertedId = -1;
+            String inserted = "INSERT INTO tbl_users (u_fname, u_lname, u_email, u_username, u_password, u_role, u_status, u_image) VALUES (?,?,?,?,?,?,?,?)";
+            PreparedStatement pst = dbc.connect.prepareStatement(inserted, Statement.RETURN_GENERATED_KEYS);
+                  
+                pst.setString(1, fname.getText());
+                pst.setString(2, lname.getText());
+                pst.setString(3, email.getText());
+                pst.setString(4, uname.getText());
+                pst.setString(5,ps.getText()); 
+                pst.setString(6,role.getSelectedItem().toString());
+                pst.setString(7,us.getSelectedItem().toString());
+                pst.setString(8,destination);
+              int affectedRows = pst.executeUpdate();
+    
+          if (affectedRows > 0) {
+        // Now retrieve the generated key
+        try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                lastInsertedId = generatedKeys.getInt(1);
+            }
+        }  
+         String actionn = "Created user account ID: " + lastInsertedId;
+        dbc.insertData("INSERT INTO tbl_logs(user_id, action, date) VALUES ('" + sess.getUid() + "', '" + actionn + "', '" + LocalDateTime.now() + "')");   
+        JOptionPane.showMessageDialog(null, "Inserted Successfully!");
                 fname.setText("");
                 lname.setText("");
                 email.setText("");
                 uname.setText("");
                 ps.setText("");
                image.setIcon(null);
-            } else {
-                JOptionPane.showMessageDialog(null, "Connection Error!");
-            }
-        }
+            } 
+        }   catch (SQLException ex) {
+                Logger.getLogger(adduser.class.getName()).log(Level.SEVERE, null, ex);
+            }}
     }//GEN-LAST:event_addActionPerformed
 
     private void selectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectActionPerformed

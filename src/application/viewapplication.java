@@ -33,7 +33,11 @@ public class viewapplication extends javax.swing.JInternalFrame {
      public void displayData(){
         try{
             dbConnectors dbc = new dbConnectors();
-            ResultSet rs = dbc.getData("SELECT * FROM tbl_applicants");
+            ResultSet rs = dbc.getData("SELECT tbl_applications.app_id, tbl_applicants.a_lname, tbl_jobs.j_name, "
+             + " tbl_users.u_id, tbl_users.u_lname, tbl_applications.status FROM tbl_applications "
+             + " INNER JOIN tbl_applicants ON tbl_applications.app_aid = tbl_applicants.a_id "
+             + " INNER JOIN tbl_jobs ON tbl_applications.app_jid = tbl_jobs.j_id "
+             + " INNER JOIN tbl_users ON tbl_applications.app_uid = tbl_users.u_id");
             applicantstable.setModel(DbUtils.resultSetToTableModel(rs));
              rs.close();
         }catch(SQLException ex){
@@ -97,7 +101,7 @@ public class viewapplication extends javax.swing.JInternalFrame {
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 690, 370));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText(" VIEW APPLICANTS");
+        jLabel1.setText(" VIEW APPLICATIONS");
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 690, 50));
 

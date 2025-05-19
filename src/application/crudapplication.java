@@ -3,10 +3,6 @@ package application;
 
 
 import adminpack.admindashboard;
-import applicant.addapplicant;
-import applicant.deleteapplicant;
-import applicant.editapplicant;
-import applicant.viewapplicant;
 import config.Session;
 import javax.swing.JOptionPane;
 import authentication.login;

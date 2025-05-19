@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -296,12 +297,11 @@ public class deleteapplicant extends javax.swing.JInternalFrame {
        lname.setText("");
         email.setText("");
         contact.setText("");
-        
         image.setIcon(null);
         destination = "";
         path = "";
-        //String actionn = "Deleted users with ID No.: " + uid.getText();
-         //   dbc.insertData("INSERT INTO logs(user_id, action, date) VALUES ('" + sess.getUid()+ "', '" + actionn + "', '" + LocalDateTime.now() + "')");
+        String actionn = "Deleted applicant with ID No.: " + aid.getText();
+        dbc.insertData("INSERT INTO tbl_logs(user_id, action, date) VALUES ('" + sess.getUid() + "', '" + actionn + "', '" + LocalDateTime.now() + "')");
         }
        
     }//GEN-LAST:event_deleteActionPerformed

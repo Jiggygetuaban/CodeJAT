@@ -6,9 +6,8 @@
 package application;
 
 
-import applicant.*;
-import static authentication.register.eml;
-import static authentication.register.usrname;
+
+import config.Session;
 import config.dbConnectors;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -20,9 +19,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
@@ -123,37 +122,15 @@ public class editapplication extends javax.swing.JInternalFrame {
         }
    }
      
-     public boolean duplicatedChecker() {
-    dbConnectors dbc = new dbConnectors();
-    try {
-        String query = "SELECT a_email FROM tbl_applicants WHERE (a_email = '" + email.getText() + "')AND a_id !='"+aid.getText()+"'";
-        ResultSet resultSet = dbc.getData(query);
-        
-        boolean duplicate = false; // Flag to track duplicates
-        
-        while (resultSet.next()) { // Loop through results (if any)
-            eml = resultSet.getString("a_email");
-            
-            
-            if (eml.equals(email.getText())) {
-                JOptionPane.showMessageDialog(null, "Email already used!");
-                email.setText("");
-                duplicate = true;
-            }   
-        }
-        
-        return duplicate;
-    } catch (SQLException ex) {
-        System.out.println("SQL Error: " + ex);
-        return true; // Assume duplicate to avoid inserting problematic data
-    }
-    
-}
+
      
      public void displayData(){
         try{
             dbConnectors dbc = new dbConnectors();
-            ResultSet rs = dbc.getData("SELECT a_id, a_lname,a_status FROM tbl_applicants");
+            ResultSet rs = dbc.getData("SELECT tbl_applications.app_id, tbl_applicants.a_lname, tbl_jobs.j_name, "
+             + " tbl_applications.status FROM tbl_applications "
+             + " INNER JOIN tbl_applicants ON tbl_applications.app_aid = tbl_applicants.a_id "
+             + " INNER JOIN tbl_jobs ON tbl_applications.app_jid = tbl_jobs.j_id ");
             applicantstable.setModel(DbUtils.resultSetToTableModel(rs));
              rs.close();
         }catch(SQLException ex){
@@ -175,25 +152,19 @@ public class editapplication extends javax.swing.JInternalFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        contact = new javax.swing.JTextField();
         aid = new javax.swing.JTextField();
-        lname = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        email = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         fname = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         image = new javax.swing.JLabel();
-        remove = new javax.swing.JButton();
-        select = new javax.swing.JButton();
         add = new javax.swing.JButton();
         CLEAR = new javax.swing.JButton();
         edit = new javax.swing.JButton();
-        address = new javax.swing.JTextField();
+        jname = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
+        status = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         applicantstable = new javax.swing.JTable();
 
@@ -225,9 +196,6 @@ public class editapplication extends javax.swing.JInternalFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        contact.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jPanel2.add(contact, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 190, 30));
-
         aid.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         aid.setEnabled(false);
         aid.addActionListener(new java.awt.event.ActionListener() {
@@ -235,30 +203,10 @@ public class editapplication extends javax.swing.JInternalFrame {
                 aidActionPerformed(evt);
             }
         });
-        jPanel2.add(aid, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 190, 30));
-
-        lname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        lname.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lnameActionPerformed(evt);
-            }
-        });
-        jPanel2.add(lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 190, 30));
+        jPanel2.add(aid, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 190, 30));
 
         jLabel2.setText(" ID:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, 20));
-
-        jLabel3.setText("Last Name:");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, 20));
-
-        email.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jPanel2.add(email, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 190, 30));
-
-        jLabel5.setText("Email:");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, 20));
-
-        jLabel6.setText("Contact:");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 60, 20));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, 20));
 
         fname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         fname.addActionListener(new java.awt.event.ActionListener() {
@@ -266,35 +214,17 @@ public class editapplication extends javax.swing.JInternalFrame {
                 fnameActionPerformed(evt);
             }
         });
-        jPanel2.add(fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 190, 30));
+        jPanel2.add(fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 190, 30));
 
-        jLabel9.setText("First Name:");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, 20));
+        jLabel9.setText("Full Name:");
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, 20));
 
         jPanel3.setBackground(new java.awt.Color(153, 153, 153));
         jPanel3.setLayout(null);
         jPanel3.add(image);
-        image.setBounds(0, 0, 130, 120);
+        image.setBounds(0, 0, 130, 110);
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 130, 120));
-
-        remove.setBackground(new java.awt.Color(255, 255, 255));
-        remove.setText("REMOVE");
-        remove.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removeActionPerformed(evt);
-            }
-        });
-        jPanel2.add(remove, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 180, 130, -1));
-
-        select.setBackground(new java.awt.Color(255, 255, 255));
-        select.setText("SELECT");
-        select.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selectActionPerformed(evt);
-            }
-        });
-        jPanel2.add(select, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, 130, -1));
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 130, 110));
 
         add.setBackground(new java.awt.Color(255, 255, 255));
         add.setText("SAVE");
@@ -303,7 +233,7 @@ public class editapplication extends javax.swing.JInternalFrame {
                 addActionPerformed(evt);
             }
         });
-        jPanel2.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 380, 130, -1));
+        jPanel2.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 390, 130, -1));
 
         CLEAR.setBackground(new java.awt.Color(255, 255, 255));
         CLEAR.setText("CLEAR");
@@ -312,7 +242,7 @@ public class editapplication extends javax.swing.JInternalFrame {
                 CLEARActionPerformed(evt);
             }
         });
-        jPanel2.add(CLEAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 350, 130, -1));
+        jPanel2.add(CLEAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 360, 130, -1));
 
         edit.setText("EDIT");
         edit.addActionListener(new java.awt.event.ActionListener() {
@@ -320,15 +250,21 @@ public class editapplication extends javax.swing.JInternalFrame {
                 editActionPerformed(evt);
             }
         });
-        jPanel2.add(edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 320, 130, -1));
+        jPanel2.add(edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 330, 130, -1));
 
-        address.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jPanel2.add(address, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 190, 30));
+        jname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jPanel2.add(jname, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 190, 30));
 
-        jLabel7.setText("Address:");
-        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, -1, 20));
+        jLabel7.setText("Status:");
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 70, 20));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 380, 420));
+        status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pending", "Approved" }));
+        jPanel2.add(status, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 190, 30));
+
+        jLabel8.setText("Job name:");
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, 70, 20));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 260, 420));
 
         applicantstable.setBackground(new java.awt.Color(255, 252, 239));
         applicantstable.setModel(new javax.swing.table.DefaultTableModel(
@@ -342,7 +278,7 @@ public class editapplication extends javax.swing.JInternalFrame {
         applicantstable.setGridColor(new java.awt.Color(255, 252, 239));
         jScrollPane1.setViewportView(applicantstable);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 10, 300, 420));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, 420, 420));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 440));
 
@@ -353,113 +289,64 @@ public class editapplication extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_aidActionPerformed
 
-    private void lnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lnameActionPerformed
-
     private void fnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fnameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_fnameActionPerformed
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-
-        if ( lname.getText().isEmpty() ||fname.getText().isEmpty() || email.getText().isEmpty() || contact.getText().isEmpty()|| address.getText().isEmpty()) {
+        Session sess = Session.getInstance();
+        if ( aid.getText().isEmpty() ||fname.getText().isEmpty() || jname.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "All Fields are required!");
-        }  else if (duplicatedChecker()) {
-            System.out.println("Duplicate Exist");
-        } else {
+        }   else {
             
             dbConnectors dbc = new dbConnectors();
-            boolean inserted = dbc.insertData("UPDATE tbl_applicants SET a_fname ='"+fname.getText()+"',a_lname ='"+lname.getText()+"',"
-                + "a_contact ='"+contact.getText()+"',a_email ='"+email.getText()+"', a_address = '"+address.getText()+"',"
-                + "a_image = '"+destination+"' WHERE a_id ='"+aid.getText()+"'");
+            boolean inserted = dbc.insertData("UPDATE tbl_applications SET status = '"+status.getSelectedItem()+"' WHERE app_id ='"+aid.getText()+"'");
 
             if (inserted) {
                 JOptionPane.showMessageDialog(null, "Updated Successfully!");
                 fname.setText("");
-                lname.setText("");
-                email.setText("");
-                contact.setText("");
-                address.setText("");
+                jname.setText("");
                image.setIcon(null);
+                String actionn = "Updated application with ID No.: " + aid.getText();
+                dbc.insertData("INSERT INTO tbl_logs(user_id, action, date) VALUES ('" + sess.getUid() + "', '" + actionn + "', '" + LocalDateTime.now() + "')");
             } else {
                 JOptionPane.showMessageDialog(null, "Connection Error!");
             }
         }
     }//GEN-LAST:event_addActionPerformed
 
-    private void selectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        int returnValue = fileChooser.showOpenDialog(null);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            try {
-                selectedFile = fileChooser.getSelectedFile();
-                destination = "src/images/" + selectedFile.getName();
-                path  = selectedFile.getAbsolutePath();
-
-                if(FileExistenceChecker(path) == 1){
-                    JOptionPane.showMessageDialog(null, "File Already Exist, Rename or Choose another!");
-                    destination = "";
-                    path="";
-                }else{
-                    image.setIcon(ResizeImage(path, null, image));
-                    
-                    select.setVisible(false);
-                }
-            } catch (Exception ex) {
-                System.out.println("File Error!");
-            }
-        }
-    }//GEN-LAST:event_selectActionPerformed
-
-    private void removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeActionPerformed
-         image.setIcon(null);
-        destination = "";
-        path = "";
-        select.setVisible(true);
-    }//GEN-LAST:event_removeActionPerformed
-
     private void CLEARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CLEARActionPerformed
         fname.setText("");
-       lname.setText("");
-        email.setText("");
-        contact.setText("");
-        
         image.setIcon(null);
         destination = "";
         path = "";
-        select.setVisible(true);
+        
     }//GEN-LAST:event_CLEARActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
          int rowIndex = applicantstable.getSelectedRow();
 
         if (rowIndex < 0) {
-            JOptionPane.showMessageDialog(null, "Please select an applicant!");
+            JOptionPane.showMessageDialog(null, "Please select an application!");
         } else {
             try {
                 dbConnectors dbc = new dbConnectors();
                 TableModel tbl = applicantstable.getModel();
-                ResultSet rs = dbc.getData("SELECT * FROM tbl_applicants WHERE a_id = '" + tbl.getValueAt(rowIndex, 0) + "'");
+                ResultSet rs = dbc.getData("SELECT tbl_applications.app_id, tbl_applicants.a_fname, tbl_applicants.a_lname, tbl_applicants.a_image, tbl_jobs.j_name, "
+             + " tbl_applications.status FROM tbl_applications INNER JOIN tbl_applicants ON tbl_applications.app_aid = tbl_applicants.a_id "
+             + " INNER JOIN tbl_jobs ON tbl_applications.app_jid = tbl_jobs.j_id  WHERE tbl_applications.app_id = '" + tbl.getValueAt(rowIndex, 0) + "'");
 
                 if (rs.next()) {
 
                     
-                    aid.setText(""+rs.getInt("a_id"));
-                    fname.setText(""+rs.getString("a_fname"));
-                    lname.setText(""+rs.getString("a_lname"));
-                    contact.setText(""+rs.getString("a_contact"));
-                    email.setText(""+rs.getString("a_email"));
-                    address.setText(""+rs.getString("a_address"));
-                    
-                    
+                    aid.setText(""+rs.getInt("app_id"));
+                    fname.setText(""+rs.getString("a_lname")+""+rs.getString("a_fname"));
+                    jname.setText(""+rs.getString("j_name"));
+                    status.setSelectedItem(""+rs.getString("status"));
                     image.setIcon(ResizeImage(rs.getString("a_image"),null,image));
                     oldpath = rs.getString("a_image");
                     path = rs.getString("a_image");
                     destination = rs.getString("a_image");
-                    
-                    
-                    
                 }
 
             } catch (SQLException ex) {
@@ -476,26 +363,20 @@ public class editapplication extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CLEAR;
     public javax.swing.JButton add;
-    public javax.swing.JTextField address;
     public javax.swing.JTextField aid;
     private javax.swing.JTable applicantstable;
-    public javax.swing.JTextField contact;
     private javax.swing.JButton edit;
-    public javax.swing.JTextField email;
     public javax.swing.JTextField fname;
     private javax.swing.JLabel image;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    public javax.swing.JTextField lname;
-    public javax.swing.JButton remove;
-    public javax.swing.JButton select;
+    private javax.swing.JTextField jname;
+    private javax.swing.JComboBox<String> status;
     // End of variables declaration//GEN-END:variables
 }
