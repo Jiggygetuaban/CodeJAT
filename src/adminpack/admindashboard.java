@@ -1,6 +1,7 @@
 
 package adminpack;
 
+import accsettings.settings;
 import applicant.crudapplicant;
 import application.crudapplication;
 import config.Session;
@@ -21,18 +22,39 @@ public class admindashboard extends javax.swing.JFrame {
         initComponents();
     }
 
-     public void displayData(){
-        try{
-            dbConnectors dbc = new dbConnectors();
-            try (ResultSet rs = dbc.getData("SELECT u_id, u_lname,u_status FROM tbl_users")) {
-                userstable.setModel(DbUtils.resultSetToTableModel(rs));
-            }
-        }catch(SQLException ex){
-            System.out.println("Errors: "+ex.getMessage());
+    public void displayData() {
+    try {
+        dbConnectors dbc = new dbConnectors();
+        
+        // Load user data into table
+        try (ResultSet rs = dbc.getData("SELECT u_id, u_lname, u_status FROM tbl_users")) {
+            userstable.setModel(DbUtils.resultSetToTableModel(rs));
+        }
 
+        // Count number of users
+        try (ResultSet rsCount = dbc.getData("SELECT COUNT(*) AS total FROM tbl_users")) {
+            if (rsCount.next()) {
+                int totalUsers = rsCount.getInt("total"); 
+                totalusers.setText(""+totalUsers);
+            }
         }
         
+        try (ResultSet rscount = dbc.getData("SELECT COUNT(*) AS total FROM tbl_applicants WHERE a_status = 'Completed'")) {
+            if (rscount.next()) {
+                int app = rscount.getInt("total");               
+                active.setText(""+app);
+            }
+        }
+        try (ResultSet rsapp = dbc.getData("SELECT COUNT(*) AS total FROM tbl_applicants")) {
+            if (rsapp.next()) {
+                int allapp = rsapp.getInt("total"); 
+                all.setText(""+allapp);
+            }
+        }
+    } catch (SQLException ex) {
+        System.out.println("Errors: " + ex.getMessage());
     }
+}
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -49,6 +71,8 @@ public class admindashboard extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel9 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -158,6 +182,30 @@ public class admindashboard extends javax.swing.JFrame {
         jLabel8.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 140, 50));
+
+        jLabel14.setBackground(new java.awt.Color(241, 207, 84));
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagesdesign/9004799_arrow_direction_left_back_icon.png"))); // NOI18N
+        jLabel14.setText("LOGOUT");
+        jLabel14.setOpaque(true);
+        jLabel14.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel14MouseClicked(evt);
+            }
+        });
+        jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 170, 40));
+
+        jLabel15.setBackground(new java.awt.Color(241, 207, 84));
+        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagesdesign/1564529_mechanism_options_settings_configuration_setting_icon.png"))); // NOI18N
+        jLabel15.setText("SETTINGS");
+        jLabel15.setOpaque(true);
+        jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel15MouseClicked(evt);
+            }
+        });
+        jPanel3.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, 170, 40));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 180, 500));
 
@@ -279,7 +327,7 @@ public class admindashboard extends javax.swing.JFrame {
         jLabel13.setBackground(new java.awt.Color(241, 207, 84));
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText("ACTIVE APPLICANTS");
+        jLabel13.setText("APPROVED APPLICANTS");
         jLabel13.setOpaque(true);
 
         active.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
@@ -326,7 +374,7 @@ public class admindashboard extends javax.swing.JFrame {
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         Session sess = Session.getInstance();      
-        
+         displayData();
         if(sess.getUid()== 0){
             JOptionPane.showMessageDialog(null, "No Account!, Please login first!");
             login lf = new login();
@@ -337,6 +385,8 @@ public class admindashboard extends javax.swing.JFrame {
             acc_name.setText(" "+sess.getLname());
             role.setText("  "+sess.getRole());
         } 
+        
+        
         
     }//GEN-LAST:event_formWindowActivated
 
@@ -349,7 +399,7 @@ public class admindashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel7MouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-      
+       displayData();
     }//GEN-LAST:event_formWindowOpened
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
@@ -375,6 +425,18 @@ public class admindashboard extends javax.swing.JFrame {
        cruda.setVisible(true);
        this.dispose();
     }//GEN-LAST:event_jLabel1MouseClicked
+
+    private void jLabel14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel14MouseClicked
+        login lgn = new login();
+        lgn.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel14MouseClicked
+
+    private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
+        settings set = new settings();
+        set.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel15MouseClicked
 
     /**
      * @param args the command line arguments
@@ -423,6 +485,8 @@ public class admindashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

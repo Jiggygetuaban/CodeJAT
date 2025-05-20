@@ -174,6 +174,19 @@ public class adduser extends javax.swing.JInternalFrame {
             return null;
         }
     }
+    
+     public boolean isValidEmail(String email) {
+    // Simple regex for email validation
+    String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+
+    if (email == null || !email.matches(emailRegex)) {
+        JOptionPane.showMessageDialog(null, "Invalid email format,email address (e.g., user@example.com).");
+        
+        return false;
+    }
+
+    return true;
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -366,11 +379,14 @@ public class adduser extends javax.swing.JInternalFrame {
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         Session sess = Session.getInstance();  
+        String emailInput = email.getText();
         if ( lname.getText().isEmpty() ||fname.getText().isEmpty() || email.getText().isEmpty() || uname.getText().isEmpty() || ps.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "All Fields are required!");
         } else if (ps.getText().length() < 8) {
             JOptionPane.showMessageDialog(null, "Password must be 8 characters above!");
             ps.setText("");
+        } else if (!isValidEmail(emailInput)) {
+          email.setText("");
         } else if (duplicatedChecker()) {
             System.out.println("Duplicate Exist");
         } else {
@@ -385,7 +401,7 @@ public class adduser extends javax.swing.JInternalFrame {
                 pst.setString(2, lname.getText());
                 pst.setString(3, email.getText());
                 pst.setString(4, uname.getText());
-                pst.setString(5,ps.getText()); 
+                pst.setString(5,hashedPass); 
                 pst.setString(6,role.getSelectedItem().toString());
                 pst.setString(7,us.getSelectedItem().toString());
                 pst.setString(8,destination);

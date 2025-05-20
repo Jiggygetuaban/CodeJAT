@@ -7,6 +7,7 @@ import adminpack.admindashboard;
 import config.Session;
 import javax.swing.JOptionPane;
 import authentication.login;
+import userpack.userdashboard;
 
 
 
@@ -227,9 +228,18 @@ public class crudjob extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
-        admindashboard adm = new admindashboard();
+        admindashboard adm = new admindashboard();  
+        userdashboard udm = new userdashboard();
+        Session sess = Session.getInstance();   
+        String role = sess.getRole();
+        System.out.println(""+role);
+        if("ADMIN".equals(role)){
+        udm.setVisible(true);
+        this.dispose();
+        } else{
         adm.setVisible(true);
         this.dispose();
+        }
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked

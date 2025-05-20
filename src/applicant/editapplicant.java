@@ -163,7 +163,18 @@ public class editapplicant extends javax.swing.JInternalFrame {
         
     }
      
-   
+    public boolean isValidEmail(String email) {
+    // Simple regex for email validation
+    String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+
+    if (email == null || !email.matches(emailRegex)) {
+        JOptionPane.showMessageDialog(null, "Invalid email format,email address (e.g., user@example.com).");
+        
+        return false;
+    }
+
+    return true;
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -362,11 +373,16 @@ public class editapplicant extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_fnameActionPerformed
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-
+        String emailInput = email.getText();
         if ( lname.getText().isEmpty() ||fname.getText().isEmpty() || email.getText().isEmpty() || contact.getText().isEmpty()|| address.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "All Fields are required!");
         }  else if (duplicatedChecker()) {
             System.out.println("Duplicate Exist");
+        } else if (!isValidEmail(emailInput)) {
+          email.setText("");
+        } else if (!contact.getText().matches("\\d+")) {
+            JOptionPane.showMessageDialog(null, "Contact should be integers only");
+           contact.setText("");
         } else {
             
             dbConnectors dbc = new dbConnectors();

@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package users;
+package accsettings;
 
+
+import authentication.login;
 import static authentication.register.eml;
 import static authentication.register.usrname;
 import config.Session;
@@ -33,12 +35,12 @@ import net.proteanit.sql.DbUtils;
  *
  * @author acer
  */
-public class edituser extends javax.swing.JInternalFrame {
+public class editacc extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form adduser
      */
-    public edituser() {
+    public editacc() {
         initComponents();
          this.setBorder(javax.swing. BorderFactory.createEmptyBorder(0,0,0,0)); 
        BasicInternalFrameUI bi = (BasicInternalFrameUI) this.getUI();
@@ -156,18 +158,7 @@ public class edituser extends javax.swing.JInternalFrame {
     
 }
      
-     public void displayData(){
-        try{
-            dbConnectors dbc = new dbConnectors();
-            ResultSet rs = dbc.getData("SELECT u_id, u_lname,u_status FROM tbl_users");
-            userstable.setModel(DbUtils.resultSetToTableModel(rs));
-             rs.close();
-        }catch(SQLException ex){
-            System.out.println("Errors: "+ex.getMessage());
-
-        }
-        
-    }
+    
       public boolean isValidEmail(String email) {
     // Simple regex for email validation
     String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
@@ -197,13 +188,9 @@ public class edituser extends javax.swing.JInternalFrame {
         lname = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         email = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        role = new javax.swing.JComboBox<>();
-        us = new javax.swing.JComboBox<>();
-        jLabel8 = new javax.swing.JLabel();
         fname = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -212,9 +199,6 @@ public class edituser extends javax.swing.JInternalFrame {
         select = new javax.swing.JButton();
         add = new javax.swing.JButton();
         CLEAR = new javax.swing.JButton();
-        edit = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        userstable = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 252, 239));
         setBorder(null);
@@ -245,7 +229,7 @@ public class edituser extends javax.swing.JInternalFrame {
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         uname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jPanel2.add(uname, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 190, 30));
+        jPanel2.add(uname, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 290, 190, 30));
 
         uid.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         uid.setEnabled(false);
@@ -254,7 +238,7 @@ public class edituser extends javax.swing.JInternalFrame {
                 uidActionPerformed(evt);
             }
         });
-        jPanel2.add(uid, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 190, 30));
+        jPanel2.add(uid, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 90, 190, 30));
 
         lname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         lname.addActionListener(new java.awt.event.ActionListener() {
@@ -262,36 +246,22 @@ public class edituser extends javax.swing.JInternalFrame {
                 lnameActionPerformed(evt);
             }
         });
-        jPanel2.add(lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 190, 30));
+        jPanel2.add(lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 190, 190, 30));
 
         jLabel2.setText("User ID:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, 20));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 70, -1, 20));
 
         jLabel3.setText("Last Name:");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, 20));
-
-        jLabel4.setText("User Status:");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 110, 20));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, -1, 20));
 
         email.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jPanel2.add(email, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 190, 30));
+        jPanel2.add(email, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 190, 30));
 
         jLabel5.setText("Email:");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, 20));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, -1, 20));
 
         jLabel6.setText("Username:");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, -1, 20));
-
-        role.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "User" }));
-        role.setBorder(null);
-        jPanel2.add(role, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, 190, 30));
-
-        us.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Pending" }));
-        us.setBorder(null);
-        jPanel2.add(us, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, 190, 30));
-
-        jLabel8.setText("Role:");
-        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 60, 20));
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 270, -1, 20));
 
         fname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         fname.addActionListener(new java.awt.event.ActionListener() {
@@ -299,17 +269,17 @@ public class edituser extends javax.swing.JInternalFrame {
                 fnameActionPerformed(evt);
             }
         });
-        jPanel2.add(fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 190, 30));
+        jPanel2.add(fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 190, 30));
 
         jLabel9.setText("First Name:");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, 20));
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, -1, 20));
 
         jPanel3.setBackground(new java.awt.Color(153, 153, 153));
         jPanel3.setLayout(null);
         jPanel3.add(image);
         image.setBounds(0, 0, 130, 120);
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 130, 120));
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 80, 130, 120));
 
         remove.setBackground(new java.awt.Color(255, 255, 255));
         remove.setText("REMOVE");
@@ -318,7 +288,7 @@ public class edituser extends javax.swing.JInternalFrame {
                 removeActionPerformed(evt);
             }
         });
-        jPanel2.add(remove, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 180, 130, -1));
+        jPanel2.add(remove, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 230, 130, -1));
 
         select.setBackground(new java.awt.Color(255, 255, 255));
         select.setText("SELECT");
@@ -327,7 +297,7 @@ public class edituser extends javax.swing.JInternalFrame {
                 selectActionPerformed(evt);
             }
         });
-        jPanel2.add(select, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, 130, -1));
+        jPanel2.add(select, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 200, 130, -1));
 
         add.setBackground(new java.awt.Color(255, 255, 255));
         add.setText("SAVE");
@@ -336,7 +306,7 @@ public class edituser extends javax.swing.JInternalFrame {
                 addActionPerformed(evt);
             }
         });
-        jPanel2.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 380, 130, -1));
+        jPanel2.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 380, 130, -1));
 
         CLEAR.setBackground(new java.awt.Color(255, 255, 255));
         CLEAR.setText("CLEAR");
@@ -345,31 +315,9 @@ public class edituser extends javax.swing.JInternalFrame {
                 CLEARActionPerformed(evt);
             }
         });
-        jPanel2.add(CLEAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 350, 130, -1));
+        jPanel2.add(CLEAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 380, 130, -1));
 
-        edit.setText("EDIT");
-        edit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editActionPerformed(evt);
-            }
-        });
-        jPanel2.add(edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 320, 130, -1));
-
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 380, 420));
-
-        userstable.setBackground(new java.awt.Color(255, 252, 239));
-        userstable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
-        userstable.setGridColor(new java.awt.Color(255, 252, 239));
-        jScrollPane1.setViewportView(userstable);
-
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 10, 300, 420));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 680, 420));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 440));
 
@@ -401,18 +349,12 @@ public class edituser extends javax.swing.JInternalFrame {
         } else {
    
             boolean inserted = dbc.insertData("UPDATE tbl_users SET u_fname ='"+fname.getText()+"',u_lname ='"+lname.getText()+"',"
-                + "u_username ='"+uname.getText()+"',u_email ='"+email.getText()+"',"
-                + "u_role ='"+role.getSelectedItem()+"',u_status ='"+us.getSelectedItem()+"',"
-                + "u_image = '"+destination+"' WHERE u_id ='"+uid.getText()+"'");
+                + "u_username ='"+uname.getText()+"',u_email ='"+email.getText()+"', u_image = '"+destination+"' WHERE u_id ='"+uid.getText()+"'");
 
             if (inserted) {
                 JOptionPane.showMessageDialog(null, "Updated Successfully!");
-                fname.setText("");
-                lname.setText("");
-                email.setText("");
-                uname.setText("");
-               image.setIcon(null);
-               String actionn = "Updated user with ID No.: " + uid.getText();
+                
+               String actionn = "Updated their account with ID No.: " + uid.getText();
             dbc.insertData("INSERT INTO tbl_logs(user_id, action, date) VALUES ('" + sess.getUid() + "', '" + actionn + "', '" + LocalDateTime.now() + "')");
             } else {
                 JOptionPane.showMessageDialog(null, "Connection Error!");
@@ -463,74 +405,47 @@ public class edituser extends javax.swing.JInternalFrame {
         select.setVisible(true);
     }//GEN-LAST:event_CLEARActionPerformed
 
-    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-         int rowIndex = userstable.getSelectedRow();
-
-        if (rowIndex < 0) {
-            JOptionPane.showMessageDialog(null, "Please select an item!");
-        } else {
-            try {
-                dbConnectors dbc = new dbConnectors();
-                TableModel tbl = userstable.getModel();
-                ResultSet rs = dbc.getData("SELECT * FROM tbl_users WHERE u_id = '" + tbl.getValueAt(rowIndex, 0) + "'");
-
-                if (rs.next()) {
-
-                    
-                    uid.setText(""+rs.getInt("u_id"));
-                    fname.setText(""+rs.getString("u_fname"));
-                    lname.setText(""+rs.getString("u_lname"));
-                    uname.setText(""+rs.getString("u_username"));
-                    email.setText(""+rs.getString("u_email"));
-
-                    role.setSelectedItem(""+rs.getString("u_role"));
-                    us.setSelectedItem(""+rs.getString("u_status"));
-                    
-                    image.setIcon(ResizeImage(rs.getString("u_image"),null,image));
-                    oldpath = rs.getString("u_image");
-                    path = rs.getString("u_image");
-                    destination = rs.getString("u_image");
-                    
-                    
-                    
-                }
-
-            } catch (SQLException ex) {
-                System.out.println("" + ex);
-            }
-        }
-    }//GEN-LAST:event_editActionPerformed
-
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
-        displayData();
+         Session sess = Session.getInstance();      
+         
+        if(sess.getUid()== 0){
+            JOptionPane.showMessageDialog(null, "No Account!, Please login first!");
+            login lf = new login();
+            lf.setVisible(true);
+            this.dispose();
+        }else{
+                    uid.setText(""+sess.getUid());
+                    fname.setText(""+sess.getFname());
+                    lname.setText(""+sess.getLname());
+                    uname.setText(""+sess.getUsername());
+                    email.setText(""+sess.getEmail());
+                    image.setIcon(ResizeImage(""+sess.getUimage(),null,image));
+                    oldpath = sess.getUimage();
+                    path = sess.getUimage();
+                    destination = sess.getUimage();
+           
+        } 
     }//GEN-LAST:event_formInternalFrameActivated
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CLEAR;
     public javax.swing.JButton add;
-    private javax.swing.JButton edit;
     public javax.swing.JTextField email;
     public javax.swing.JTextField fname;
     private javax.swing.JLabel image;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JTextField lname;
     public javax.swing.JButton remove;
-    public javax.swing.JComboBox<String> role;
     public javax.swing.JButton select;
     public javax.swing.JTextField uid;
     public javax.swing.JTextField uname;
-    public javax.swing.JComboBox<String> us;
-    private javax.swing.JTable userstable;
     // End of variables declaration//GEN-END:variables
 }

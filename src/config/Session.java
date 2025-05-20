@@ -20,7 +20,8 @@ public class Session {
     private String username;
     private String role;
     private String status;
-    
+    private String Uimage;
+    private String password;
     private Session(){
        //Private cons. prevents instance
 }
@@ -91,6 +92,21 @@ public class Session {
         this.status = status;
     }
     
+    public String getUimage() {
+        return Uimage;
+    }
+
+    public void setUimage(String Uimage) {
+        this.Uimage = Uimage;
+    }
+    
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
 
 

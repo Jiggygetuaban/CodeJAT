@@ -8,6 +8,7 @@ package authentication;
 import adminpack.admindashboard;
 import config.Session;
 import config.dbConnectors;
+import config.passwordHasher;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
@@ -28,34 +29,23 @@ public class login extends javax.swing.JFrame {
         initComponents();
     }
     
-    static String status;
-    static String roles;
     
-    public String hashPassword(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hashedBytes = md.digest(password.getBytes());
-            StringBuilder sb = new StringBuilder();
-            for (byte b : hashedBytes) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+   
+    
+    
 
-    
+     static String hashedpassword, rehashedpassword,status,roles;  
     public static boolean loginAcc(String username, String password){
     dbConnectors connector = new dbConnectors();
-    login lg = new login(); // To access the hashPassword() instance method
+    
     try {
-        String hashedPass = lg.hashPassword(password); // 👈 hash the input password
-        String query = "SELECT * FROM tbl_users WHERE u_username = '" + username + "' AND u_password = '" + hashedPass + "'";
+        // 👈 hash the input password
+        String query = "SELECT * FROM tbl_users WHERE u_username = '" + username + "'";
         ResultSet resultSet = connector.getData(query);
 
         if (resultSet.next()) {
+            hashedpassword = resultSet.getString("u_password");
+            rehashedpassword = passwordHasher.hashPassword(password);
             status = resultSet.getString("u_status");
             roles = resultSet.getString("u_role");
             Session sess = Session.getInstance();
@@ -66,14 +56,15 @@ public class login extends javax.swing.JFrame {
             sess.setUsername(resultSet.getString("u_username"));
             sess.setRole(resultSet.getString("u_role"));
             sess.setStatus(resultSet.getString("u_status"));
+            sess.setPassword(resultSet.getString("u_password"));
             return true;
         } else {
             return false;
         }
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        return false;
-    }
+    } catch (SQLException | NoSuchAlgorithmException ex) {
+                    System.out.println(""+ex);
+                    return false;
+            }
 }
 
     /**

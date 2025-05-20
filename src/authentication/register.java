@@ -6,12 +6,14 @@
 package authentication;
 
 import config.dbConnectors;
-import java.security.MessageDigest;
+import config.passwordHasher;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import authentication.login;
+
 
 /**
  *
@@ -30,20 +32,7 @@ public class register extends javax.swing.JFrame {
     
 
     // 🔐 Password Hashing Function
-    public String hashPassword(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hashedBytes = md.digest(password.getBytes());
-            StringBuilder sb = new StringBuilder();
-            for (byte b : hashedBytes) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+    
     
     public boolean duplicatedChecker() {
     dbConnectors dbc = new dbConnectors();
@@ -75,6 +64,19 @@ public class register extends javax.swing.JFrame {
         System.out.println("SQL Error: " + ex);
         return true; // Assume duplicate to avoid inserting problematic data
     }
+}
+    
+     public boolean isValidEmail(String email) {
+    // Simple regex for email validation
+    String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+
+    if (email == null || !email.matches(emailRegex)) {
+        JOptionPane.showMessageDialog(null, "Invalid email format,email address (e.g., user@example.com).");
+        
+        return false;
+    }
+
+    return true;
 }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -276,17 +278,22 @@ public class register extends javax.swing.JFrame {
     }//GEN-LAST:event_psActionPerformed
 
     private void registerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerMouseClicked
-         if (fname.getText().isEmpty() || lname.getText().isEmpty() || email.getText().isEmpty() || uname.getText().isEmpty() || ps.getText().isEmpty()) {
+        String emailInput = email.getText();
+        if (fname.getText().isEmpty() || lname.getText().isEmpty() || email.getText().isEmpty() || uname.getText().isEmpty() || ps.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "All Fields are required!");
         } else if (ps.getText().length() < 8) {
             JOptionPane.showMessageDialog(null, "Password must be 8 characters above!");
             ps.setText("");
-        } else if (duplicatedChecker()) {
+        } else if (!isValidEmail(emailInput)) {
+          email.setText("");
+        }else if (duplicatedChecker()) {
             System.out.println("Duplicate Exist");
         } else {
             dbConnectors dbc = new dbConnectors();
-            String hashedPass = hashPassword(ps.getText());
-            String query = "INSERT INTO tbl_users (u_fname, u_lname, u_email, u_username, u_password, u_role, u_status,u_image) "
+            String hashedPass;
+             try {
+                 hashedPass = passwordHasher.hashPassword(ps.getText());
+                 String query = "INSERT INTO tbl_users (u_fname, u_lname, u_email, u_username, u_password, u_role, u_status,u_image) "
                     + "VALUES ('" + fname.getText() + "','" + lname.getText() + "','" + email.getText() + "','" 
                     + uname.getText() + "','" + hashedPass + "','" + role.getSelectedItem() + "','Inactive',' ')";
             if (dbc.insertData(query)) {
@@ -297,6 +304,10 @@ public class register extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Connection Error!");
             }
+             } catch (NoSuchAlgorithmException ex) {
+                 Logger.getLogger(register.class.getName()).log(Level.SEVERE, null, ex);
+             }
+            
         }
     
     }//GEN-LAST:event_registerMouseClicked
