@@ -28,8 +28,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
-import javax.swing.table.TableModel;
-import net.proteanit.sql.DbUtils;
+
 
 /**
  *
@@ -353,7 +352,16 @@ public class editacc extends javax.swing.JInternalFrame {
 
             if (inserted) {
                 JOptionPane.showMessageDialog(null, "Updated Successfully!");
-                
+                if (destination == null || destination.isEmpty()) {
+                File existingFile = new File(oldpath);
+                if (existingFile.exists()) {
+                    existingFile.delete();
+                }
+               } else {
+                if (!oldpath.equals(path)) {
+                    imageUpdater(oldpath, path);
+                }
+}
                String actionn = "Updated their account with ID No.: " + uid.getText();
             dbc.insertData("INSERT INTO tbl_logs(user_id, action, date) VALUES ('" + sess.getUid() + "', '" + actionn + "', '" + LocalDateTime.now() + "')");
             } else {

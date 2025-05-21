@@ -1,15 +1,20 @@
 
 package adminpack;
 
+import static accsettings.editacc.getHeightFromWidth;
 import accsettings.settings;
 import applicant.crudapplicant;
 import application.crudapplication;
+import application.printing;
 import config.Session;
 import javax.swing.JOptionPane;
 import authentication.login;
 import config.dbConnectors;
+import java.awt.Image;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import job.crudjob;
 import net.proteanit.sql.DbUtils;
 import users.cruduser;
@@ -55,6 +60,21 @@ public class admindashboard extends javax.swing.JFrame {
         System.out.println("Errors: " + ex.getMessage());
     }
 }
+    public  ImageIcon ResizeImage(String ImagePath, byte[] pic, JLabel label) {
+    ImageIcon MyImage = null;
+        if(ImagePath !=null){
+            MyImage = new ImageIcon(ImagePath);
+        }else{
+            MyImage = new ImageIcon(pic);
+        }
+        
+    int newHeight = getHeightFromWidth(ImagePath, label.getWidth());
+
+    Image img = MyImage.getImage();
+    Image newImg = img.getScaledInstance(label.getWidth(), newHeight, Image.SCALE_SMOOTH);
+    ImageIcon image = new ImageIcon(newImg);
+    return image;
+}
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -73,10 +93,13 @@ public class admindashboard extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         uname = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        image = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         userstable = new javax.swing.JTable();
@@ -193,7 +216,7 @@ public class admindashboard extends javax.swing.JFrame {
                 jLabel14MouseClicked(evt);
             }
         });
-        jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 170, 40));
+        jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, 170, 40));
 
         jLabel15.setBackground(new java.awt.Color(241, 207, 84));
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -206,6 +229,18 @@ public class admindashboard extends javax.swing.JFrame {
             }
         });
         jPanel3.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, 170, 40));
+
+        jLabel16.setBackground(new java.awt.Color(241, 207, 84));
+        jLabel16.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagesdesign/326675_print_icon.png"))); // NOI18N
+        jLabel16.setText(" PRINT");
+        jLabel16.setOpaque(true);
+        jLabel16.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel16MouseClicked(evt);
+            }
+        });
+        jPanel3.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 170, 40));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 180, 500));
 
@@ -235,7 +270,14 @@ public class admindashboard extends javax.swing.JFrame {
         uname.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         uname.setForeground(new java.awt.Color(255, 255, 255));
         uname.setText("uname");
-        jPanel2.add(uname, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, 540, 100));
+        jPanel2.add(uname, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 550, 100));
+
+        jPanel7.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel7.setLayout(null);
+        jPanel7.add(image);
+        image.setBounds(0, 0, 110, 100);
+
+        jPanel2.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 110, 100));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 70, 670, 100));
 
@@ -384,6 +426,8 @@ public class admindashboard extends javax.swing.JFrame {
            
             acc_name.setText(" "+sess.getLname());
             role.setText("  "+sess.getRole());
+            uname.setText(" "+sess.getUsername());
+            image.setIcon(ResizeImage(""+sess.getUimage(),null,image));
         } 
         
         
@@ -438,6 +482,12 @@ public class admindashboard extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jLabel15MouseClicked
 
+    private void jLabel16MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel16MouseClicked
+        printing prnt = new printing();
+        prnt.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel16MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -480,6 +530,7 @@ public class admindashboard extends javax.swing.JFrame {
     private javax.swing.JLabel acc_name;
     private javax.swing.JLabel active;
     private javax.swing.JLabel all;
+    private javax.swing.JLabel image;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -487,6 +538,7 @@ public class admindashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -501,6 +553,7 @@ public class admindashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel role;

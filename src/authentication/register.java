@@ -101,11 +101,11 @@ public class register extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         ps = new javax.swing.JPasswordField();
-        register = new javax.swing.JLabel();
-        cancel = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         role = new javax.swing.JComboBox<>();
         showpass = new javax.swing.JCheckBox();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -172,34 +172,6 @@ public class register extends javax.swing.JFrame {
         });
         jPanel2.add(ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 260, 30));
 
-        register.setBackground(new java.awt.Color(255, 153, 102));
-        register.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        register.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        register.setText("SIGN UP");
-        register.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        register.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        register.setOpaque(true);
-        register.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                registerMouseClicked(evt);
-            }
-        });
-        jPanel2.add(register, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 400, 100, 30));
-
-        cancel.setBackground(new java.awt.Color(255, 153, 102));
-        cancel.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        cancel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        cancel.setText("CANCEL");
-        cancel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        cancel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        cancel.setOpaque(true);
-        cancel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cancelMouseClicked(evt);
-            }
-        });
-        jPanel2.add(cancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 400, 100, 30));
-
         jLabel4.setText("Role:");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 50, 20));
 
@@ -215,6 +187,22 @@ public class register extends javax.swing.JFrame {
             }
         });
         jPanel2.add(showpass, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, 250, 20));
+
+        jButton1.setText("SIGN UP");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 400, 110, 30));
+
+        jButton2.setText("CANCEL");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 400, 110, 30));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 350, 450));
 
@@ -277,7 +265,23 @@ public class register extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_psActionPerformed
 
-    private void registerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerMouseClicked
+    private void showpassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showpassActionPerformed
+        if(showpass.isSelected()){
+            ps.setEchoChar((char)0);
+        }  else {
+            ps.setEchoChar('*');
+        }
+    }//GEN-LAST:event_showpassActionPerformed
+
+    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
+        setState(ICONIFIED);
+    }//GEN-LAST:event_jLabel9MouseClicked
+
+    private void jLabel14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel14MouseClicked
+        System.exit(0);       // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel14MouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String emailInput = email.getText();
         if (fname.getText().isEmpty() || lname.getText().isEmpty() || email.getText().isEmpty() || uname.getText().isEmpty() || ps.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "All Fields are required!");
@@ -309,30 +313,13 @@ public class register extends javax.swing.JFrame {
              }
             
         }
-    
-    }//GEN-LAST:event_registerMouseClicked
+    }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void cancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelMouseClicked
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         login lgn = new login();
         lgn.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_cancelMouseClicked
-
-    private void showpassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showpassActionPerformed
-        if(showpass.isSelected()){
-            ps.setEchoChar((char)0);
-        }  else {
-            ps.setEchoChar('*');
-        }
-    }//GEN-LAST:event_showpassActionPerformed
-
-    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        setState(ICONIFIED);
-    }//GEN-LAST:event_jLabel9MouseClicked
-
-    private void jLabel14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel14MouseClicked
-        System.exit(0);       // TODO add your handling code here:
-    }//GEN-LAST:event_jLabel14MouseClicked
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -370,9 +357,10 @@ public class register extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel cancel;
     private javax.swing.JTextField email;
     private javax.swing.JTextField fname;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -389,7 +377,6 @@ public class register extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField lname;
     private javax.swing.JPasswordField ps;
-    private javax.swing.JLabel register;
     private javax.swing.JComboBox<String> role;
     private javax.swing.JCheckBox showpass;
     private javax.swing.JTextField uname;

@@ -392,6 +392,16 @@ public class editapplicant extends javax.swing.JInternalFrame {
 
             if (inserted) {
                 JOptionPane.showMessageDialog(null, "Updated Successfully!");
+                if(destination.isEmpty()){
+                File existingFile = new File(oldpath);
+                if(existingFile.exists()){
+                existingFile.delete();
+                }
+                }else{
+                if(!(oldpath.equals(path))){
+                imageUpdater(oldpath,path);
+                }
+                }
                 fname.setText("");
                 lname.setText("");
                 email.setText("");

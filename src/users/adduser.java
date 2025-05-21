@@ -413,7 +413,7 @@ public class adduser extends javax.swing.JInternalFrame {
             if (generatedKeys.next()) {
                 lastInsertedId = generatedKeys.getInt(1);
             }
-        }  
+        } Files.copy(selectedFile.toPath(), new File(destination).toPath(),StandardCopyOption.REPLACE_EXISTING); 
          String actionn = "Created user account ID: " + lastInsertedId;
         dbc.insertData("INSERT INTO tbl_logs(user_id, action, date) VALUES ('" + sess.getUid() + "', '" + actionn + "', '" + LocalDateTime.now() + "')");   
         JOptionPane.showMessageDialog(null, "Inserted Successfully!");
@@ -425,6 +425,8 @@ public class adduser extends javax.swing.JInternalFrame {
                image.setIcon(null);
             } 
         }   catch (SQLException ex) {
+                Logger.getLogger(adduser.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
                 Logger.getLogger(adduser.class.getName()).log(Level.SEVERE, null, ex);
             }}
     }//GEN-LAST:event_addActionPerformed

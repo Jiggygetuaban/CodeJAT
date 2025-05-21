@@ -39,26 +39,28 @@ public class recovery extends javax.swing.JInternalFrame {
     }
     
     
-    public static String uid;
-    public boolean existChecker() {
+   public static String uid;
+
+public boolean existChecker() {
     dbConnectors dbc = new dbConnectors();
     try {
-        String query = "SELECT * FROM tbl_recovery WHERE uid = '"+id.getText()+"'";
+        String query = "SELECT * FROM tbl_recovery WHERE uid = '" + id.getText() + "'";
         ResultSet resultSet = dbc.getData(query);
-        
 
-        
-        while (resultSet.next()) { // Loop through results (if any)
+        if (resultSet.next()) {
+            
             uid = resultSet.getString("uid");
-    }
-        
-        return true;
+            
+            return true;
+        } else {
+            
+            return false;
+        }
     } catch (SQLException ex) {
-        System.out.println("SQL Error: " + ex);
-        return true; // Assume duplicate to avoid inserting problematic data
+        System.out.println("SQL Error: " + ex.getMessage());
+        return false; // Safer to return false if error occurs
     }
 }
-     
     
      
    
@@ -78,12 +80,11 @@ public class recovery extends javax.swing.JInternalFrame {
         add = new javax.swing.JButton();
         CLEAR = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        a3 = new javax.swing.JPasswordField();
-        showpass = new javax.swing.JCheckBox();
         jLabel8 = new javax.swing.JLabel();
-        a2 = new javax.swing.JPasswordField();
         jLabel9 = new javax.swing.JLabel();
-        a1 = new javax.swing.JPasswordField();
+        a2 = new javax.swing.JTextField();
+        a3 = new javax.swing.JTextField();
+        a1 = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(255, 252, 239));
         setBorder(null);
@@ -132,7 +133,7 @@ public class recovery extends javax.swing.JInternalFrame {
                 addActionPerformed(evt);
             }
         });
-        jPanel2.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 370, 130, -1));
+        jPanel2.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 360, 130, -1));
 
         CLEAR.setBackground(new java.awt.Color(255, 255, 255));
         CLEAR.setText("CLEAR");
@@ -141,46 +142,35 @@ public class recovery extends javax.swing.JInternalFrame {
                 CLEARActionPerformed(evt);
             }
         });
-        jPanel2.add(CLEAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 370, 130, -1));
+        jPanel2.add(CLEAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 360, 130, -1));
 
         jLabel7.setText("favorite movie:");
         jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, -1, 20));
 
-        a3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                a3ActionPerformed(evt);
-            }
-        });
-        jPanel2.add(a3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 260, 260, 30));
-
-        showpass.setBackground(new java.awt.Color(255, 255, 255));
-        showpass.setText("View password");
-        showpass.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                showpassActionPerformed(evt);
-            }
-        });
-        jPanel2.add(showpass, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 290, 250, 20));
-
-        jLabel8.setText("favorite book:");
+        jLabel8.setText("favorite Singer:");
         jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, -1, 20));
 
+        jLabel9.setText("favorite food:");
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, -1, 20));
+
+        a2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         a2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 a2ActionPerformed(evt);
             }
         });
-        jPanel2.add(a2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 200, 260, 30));
+        jPanel2.add(a2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 200, 280, 30));
 
-        jLabel9.setText("favorite food:");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, -1, 20));
-
-        a1.addActionListener(new java.awt.event.ActionListener() {
+        a3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        a3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                a1ActionPerformed(evt);
+                a3ActionPerformed(evt);
             }
         });
-        jPanel2.add(a1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 260, 30));
+        jPanel2.add(a3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 260, 280, 30));
+
+        a1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jPanel2.add(a1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 280, 30));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 680, 420));
 
@@ -195,26 +185,27 @@ public class recovery extends javax.swing.JInternalFrame {
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
          
-        dbConnectors dbc = new dbConnectors();
-         
-        Session sess = Session.getInstance();
-        if(existChecker()){
-            String answer1, answer2, answer3;
-            try {
-                answer1 = passwordHasher.hashPassword(a1.getText());
-                answer2 = passwordHasher.hashPassword(a2.getText());
-                answer3 = passwordHasher.hashPassword(a3.getText());
-                if(uid.equals(id.getText())){
-                dbc.insertData("UPDATE tbl_recovery SET answer1 ='"+answer1+"',answer2 ='"+answer2+"',answer3 ='"+answer3+"' WHERE uid ='"+id.getText()+"'");
-                JOptionPane.showMessageDialog(null,"recovery updated successfully.");
-            }else{}
-            dbc.insertData("INSERT INTO tbl_recovery(uid, answer1,answer2,answer3) VALUES('"+sess.getUid()+"','"+answer1+"','"+answer2+"','"+answer3+"')");
-            JOptionPane.showMessageDialog(null,"recovery added successfully.");
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(recovery.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-        }
+       dbConnectors dbc = new dbConnectors();
+Session sess = Session.getInstance();
+
+String answer1, answer2, answer3;
+try {
+    answer1 = passwordHasher.hashPassword(a1.getText());
+    answer2 = passwordHasher.hashPassword(a2.getText());
+    answer3 = passwordHasher.hashPassword(a3.getText());
+
+    if (existChecker()) {
+        // User already exists — perform UPDATE
+        dbc.insertData("UPDATE tbl_recovery SET r_answer1 = '" + answer1 + "', r_answer2 = '" + answer2 + "', r_answer3 = '" + answer3 + "' WHERE uid = '" + id.getText() + "'");
+        JOptionPane.showMessageDialog(null, "Recovery updated successfully.");
+    } else {
+        // User does not exist — perform INSERT
+        dbc.insertData("INSERT INTO tbl_recovery(uid, r_answer1, r_answer2, r_answer3) VALUES('" + sess.getUid() + "', '" + answer1 + "', '" + answer2 + "', '" + answer3 + "')");
+        JOptionPane.showMessageDialog(null, "Recovery added successfully.");
+    }
+} catch (NoSuchAlgorithmException ex) {
+    Logger.getLogger(recovery.class.getName()).log(Level.SEVERE, null, ex);
+}
     }//GEN-LAST:event_addActionPerformed
 
     private void CLEARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CLEARActionPerformed
@@ -223,9 +214,7 @@ public class recovery extends javax.swing.JInternalFrame {
 
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
          Session sess = Session.getInstance();      
-            a1.setEchoChar('*');
-            a2.setEchoChar('*');
-            a3.setEchoChar('*');
+           
         if(sess.getUid()== 0){
             JOptionPane.showMessageDialog(null, "No Account!, Please login first!");
             login lf = new login();
@@ -241,32 +230,16 @@ public class recovery extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_a3ActionPerformed
 
-    private void showpassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showpassActionPerformed
-        if(showpass.isSelected()){
-            a1.setEchoChar((char)0);
-            a2.setEchoChar((char)0);
-            a3.setEchoChar((char)0);
-        }  else {
-            a1.setEchoChar('*');
-            a2.setEchoChar('*');
-            a3.setEchoChar('*');
-        }
-    }//GEN-LAST:event_showpassActionPerformed
-
     private void a2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_a2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_a2ActionPerformed
 
-    private void a1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_a1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_a1ActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CLEAR;
-    private javax.swing.JPasswordField a1;
-    private javax.swing.JPasswordField a2;
-    private javax.swing.JPasswordField a3;
+    private javax.swing.JTextField a1;
+    private javax.swing.JTextField a2;
+    private javax.swing.JTextField a3;
     public javax.swing.JButton add;
     public javax.swing.JTextField id;
     private javax.swing.JLabel jLabel2;
@@ -275,6 +248,5 @@ public class recovery extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JCheckBox showpass;
     // End of variables declaration//GEN-END:variables
 }

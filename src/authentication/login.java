@@ -9,7 +9,6 @@ import adminpack.admindashboard;
 import config.Session;
 import config.dbConnectors;
 import config.passwordHasher;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -57,6 +56,7 @@ public class login extends javax.swing.JFrame {
             sess.setRole(resultSet.getString("u_role"));
             sess.setStatus(resultSet.getString("u_status"));
             sess.setPassword(resultSet.getString("u_password"));
+            sess.setUimage(resultSet.getString("u_image"));
             return true;
         } else {
             return false;
@@ -83,9 +83,10 @@ public class login extends javax.swing.JFrame {
         pass = new javax.swing.JPasswordField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        register = new javax.swing.JLabel();
-        login = new javax.swing.JLabel();
         showpass = new javax.swing.JCheckBox();
+        register = new javax.swing.JButton();
+        login = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -109,7 +110,7 @@ public class login extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Sign In");
-        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 330, -1));
+        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 380, -1));
 
         user.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         user.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
@@ -118,41 +119,18 @@ public class login extends javax.swing.JFrame {
         pass.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jPanel3.add(pass, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 290, 30));
 
-        jLabel3.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jLabel3.setText("Username:");
-        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 79, -1, 30));
+        jLabel3.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        jLabel3.setText("Forgot password:");
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
+        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 120, 30));
 
         jLabel4.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         jLabel4.setText("Password:");
         jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 149, -1, 30));
-
-        register.setBackground(new java.awt.Color(255, 153, 102));
-        register.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        register.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        register.setText("REGISTER");
-        register.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        register.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        register.setOpaque(true);
-        register.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                registerMouseClicked(evt);
-            }
-        });
-        jPanel3.add(register, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 260, 100, 30));
-
-        login.setBackground(new java.awt.Color(255, 153, 102));
-        login.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        login.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        login.setText("LOGIN");
-        login.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        login.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        login.setOpaque(true);
-        login.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                loginMouseClicked(evt);
-            }
-        });
-        jPanel3.add(login, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 260, 100, 30));
 
         showpass.setBackground(new java.awt.Color(255, 255, 255));
         showpass.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
@@ -163,6 +141,26 @@ public class login extends javax.swing.JFrame {
             }
         });
         jPanel3.add(showpass, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 250, 30));
+
+        register.setText("REGISTER");
+        register.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registerActionPerformed(evt);
+            }
+        });
+        jPanel3.add(register, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 260, 110, 30));
+
+        login.setText("LOGIN");
+        login.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginActionPerformed(evt);
+            }
+        });
+        jPanel3.add(login, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 260, 110, 30));
+
+        jLabel8.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        jLabel8.setText("Username:");
+        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 79, -1, 30));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 380, 370));
 
@@ -213,13 +211,27 @@ public class login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void registerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerMouseClicked
-        register rgs = new register();
-        rgs.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_registerMouseClicked
+    private void showpassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showpassActionPerformed
+        if(showpass.isSelected()){
+            pass.setEchoChar((char)0);
+        }  else {
+            pass.setEchoChar('*');
+        }
+    }//GEN-LAST:event_showpassActionPerformed
 
-    private void loginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginMouseClicked
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+       pass.setEchoChar('*');
+    }//GEN-LAST:event_formWindowOpened
+
+    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+        setState(ICONIFIED);
+    }//GEN-LAST:event_jLabel6MouseClicked
+
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        System.exit(0);       // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel7MouseClicked
+
+    private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
          if(loginAcc(user.getText(),pass.getText())){
             if(!status.equals("Active")){
                 JOptionPane.showMessageDialog(null,"In-Active acocunt, Contact the Admin!");
@@ -241,27 +253,19 @@ public class login extends javax.swing.JFrame {
         }else{
             JOptionPane.showMessageDialog(null,"Account Does not Exist!");
         }
-    }//GEN-LAST:event_loginMouseClicked
+    }//GEN-LAST:event_loginActionPerformed
 
-    private void showpassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showpassActionPerformed
-        if(showpass.isSelected()){
-            pass.setEchoChar((char)0);
-        }  else {
-            pass.setEchoChar('*');
-        }
-    }//GEN-LAST:event_showpassActionPerformed
+    private void registerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerActionPerformed
+        register rgs = new register();
+        rgs.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_registerActionPerformed
 
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-       pass.setEchoChar('*');
-    }//GEN-LAST:event_formWindowOpened
-
-    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
-        setState(ICONIFIED);
-    }//GEN-LAST:event_jLabel6MouseClicked
-
-    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
-        System.exit(0);       // TODO add your handling code here:
-    }//GEN-LAST:event_jLabel7MouseClicked
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        forgotpass fgpss = new forgotpass();
+        fgpss.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel3MouseClicked
 
     /**
      * @param args the command line arguments
@@ -306,11 +310,12 @@ public class login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JLabel login;
+    private javax.swing.JButton login;
     private javax.swing.JPasswordField pass;
-    private javax.swing.JLabel register;
+    private javax.swing.JButton register;
     private javax.swing.JCheckBox showpass;
     private javax.swing.JTextField user;
     // End of variables declaration//GEN-END:variables

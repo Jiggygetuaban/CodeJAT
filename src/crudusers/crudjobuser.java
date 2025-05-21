@@ -1,6 +1,8 @@
 
-package application;
+package crudusers;
 
+
+import job.*;
 
 import adminpack.admindashboard;
 import config.Session;
@@ -10,10 +12,10 @@ import userpack.userdashboard;
 
 
 
-public class crudapplication extends javax.swing.JFrame {
+public class crudjobuser extends javax.swing.JFrame {
 
   
-    public crudapplication() {
+    public crudjobuser() {
         initComponents();
     }
 
@@ -72,7 +74,7 @@ public class crudapplication extends javax.swing.JFrame {
         jLabel2.setBackground(new java.awt.Color(241, 207, 84));
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagesdesign/1564491_add_create_new_plus_icon.png"))); // NOI18N
-        jLabel2.setText("ADD APPLICATION");
+        jLabel2.setText("ADD JOB");
         jLabel2.setOpaque(true);
         jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -84,7 +86,7 @@ public class crudapplication extends javax.swing.JFrame {
         jLabel3.setBackground(new java.awt.Color(241, 207, 84));
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagesdesign/8666681_edit_icon.png"))); // NOI18N
-        jLabel3.setText("EDIT APPLICATION");
+        jLabel3.setText("EDIT JOB");
         jLabel3.setOpaque(true);
         jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -96,7 +98,7 @@ public class crudapplication extends javax.swing.JFrame {
         jLabel4.setBackground(new java.awt.Color(241, 207, 84));
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagesdesign/9004772_cross_delete_cancel_remove_icon.png"))); // NOI18N
-        jLabel4.setText("DELETE APPLICATION");
+        jLabel4.setText("DELETE JOB");
         jLabel4.setOpaque(true);
         jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -108,7 +110,7 @@ public class crudapplication extends javax.swing.JFrame {
         jLabel5.setBackground(new java.awt.Color(241, 207, 84));
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagesdesign/2931174_clipboard_copy_paste_analysis_report_icon.png"))); // NOI18N
-        jLabel5.setText("VIEW APPLICATION");
+        jLabel5.setText("VIEW JOBS");
         jLabel5.setOpaque(true);
         jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -187,16 +189,15 @@ public class crudapplication extends javax.swing.JFrame {
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         Session sess = Session.getInstance();      
-       
+        
         if(sess.getUid()== 0){
             JOptionPane.showMessageDialog(null, "No Account!, Please login first!");
             login lf = new login();
             lf.setVisible(true);
             this.dispose();
         }else{
-            
+           
             acc_name.setText(" "+sess.getLname());
-          
         } 
         
     }//GEN-LAST:event_formWindowActivated
@@ -211,46 +212,38 @@ public class crudapplication extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
     jDesktopPane1.removeAll();
-    addapplication ad = new addapplication();
+    addjob ad = new addjob();
     jDesktopPane1.add(ad).setVisible(true);
     }//GEN-LAST:event_formWindowOpened
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
       jDesktopPane1.removeAll();
-    editapplication ed = new editapplication();
+    editjob ed = new editjob();
     jDesktopPane1.add(ed).setVisible(true);
     }//GEN-LAST:event_jLabel3MouseClicked
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
     jDesktopPane1.removeAll();
-    deleteapplication dl = new deleteapplication();
+    deletejob dl = new deletejob();
     jDesktopPane1.add(dl).setVisible(true);   
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         admindashboard adm = new admindashboard();  
         userdashboard udm = new userdashboard();
-        Session sess = Session.getInstance();   
-        String role = sess.getRole();
-        System.out.println(""+role);
-        if("ADMIN".equals(role)){
         udm.setVisible(true);
         this.dispose();
-        } else{
-        adm.setVisible(true);
-        this.dispose();
-        }
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
         jDesktopPane1.removeAll();
-        addapplication ad = new addapplication();
+        addjob ad = new addjob();
         jDesktopPane1.add(ad).setVisible(true);
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         jDesktopPane1.removeAll();
-        viewapplication ad = new viewapplication();
+        viewjob ad = new viewjob();
         jDesktopPane1.add(ad).setVisible(true);  
     }//GEN-LAST:event_jLabel5MouseClicked
 
@@ -271,14 +264,46 @@ public class crudapplication extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(crudapplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(crudjobuser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(crudapplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(crudjobuser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(crudapplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(crudjobuser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(crudapplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(crudjobuser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -315,7 +340,7 @@ public class crudapplication extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new crudapplication().setVisible(true);
+                new crudjobuser().setVisible(true);
             }
         });
     }

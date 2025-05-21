@@ -392,6 +392,7 @@ public class addapplicant extends javax.swing.JInternalFrame {
                 lastInsertedId = generatedKeys.getInt(1);
             }
         }
+        Files.copy(selectedFile.toPath(), new File(destination).toPath(),StandardCopyOption.REPLACE_EXISTING);
         String actionn = "Added applicant with ID: " + lastInsertedId;
         dbc.insertData("INSERT INTO tbl_logs(user_id, action, date) VALUES ('" + sess.getUid() + "', '" + actionn + "', '" + LocalDateTime.now() + "')");
         JOptionPane.showMessageDialog(null, "Inserted Successfully!");
@@ -403,6 +404,8 @@ public class addapplicant extends javax.swing.JInternalFrame {
                image.setIcon(null);              
           }         
              } catch (SQLException ex) {
+                 Logger.getLogger(addapplicant.class.getName()).log(Level.SEVERE, null, ex);
+             } catch (IOException ex) {
                  Logger.getLogger(addapplicant.class.getName()).log(Level.SEVERE, null, ex);
              }  
         }

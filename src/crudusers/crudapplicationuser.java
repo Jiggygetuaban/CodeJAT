@@ -1,8 +1,10 @@
 
-package application;
+package crudusers;
 
 
 import adminpack.admindashboard;
+import application.addapplication;
+import application.viewapplication;
 import config.Session;
 import javax.swing.JOptionPane;
 import authentication.login;
@@ -10,10 +12,10 @@ import userpack.userdashboard;
 
 
 
-public class crudapplication extends javax.swing.JFrame {
+public class crudapplicationuser extends javax.swing.JFrame {
 
   
-    public crudapplication() {
+    public crudapplicationuser() {
         initComponents();
     }
 
@@ -26,8 +28,6 @@ public class crudapplication extends javax.swing.JFrame {
         acc_name = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel9 = new javax.swing.JLabel();
@@ -67,7 +67,7 @@ public class crudapplication extends javax.swing.JFrame {
                 jLabel1MouseClicked(evt);
             }
         });
-        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 170, 40));
+        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 170, 40));
 
         jLabel2.setBackground(new java.awt.Color(241, 207, 84));
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -81,30 +81,6 @@ public class crudapplication extends javax.swing.JFrame {
         });
         jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 170, 40));
 
-        jLabel3.setBackground(new java.awt.Color(241, 207, 84));
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagesdesign/8666681_edit_icon.png"))); // NOI18N
-        jLabel3.setText("EDIT APPLICATION");
-        jLabel3.setOpaque(true);
-        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel3MouseClicked(evt);
-            }
-        });
-        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 170, 40));
-
-        jLabel4.setBackground(new java.awt.Color(241, 207, 84));
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagesdesign/9004772_cross_delete_cancel_remove_icon.png"))); // NOI18N
-        jLabel4.setText("DELETE APPLICATION");
-        jLabel4.setOpaque(true);
-        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel4MouseClicked(evt);
-            }
-        });
-        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 170, 40));
-
         jLabel5.setBackground(new java.awt.Color(241, 207, 84));
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagesdesign/2931174_clipboard_copy_paste_analysis_report_icon.png"))); // NOI18N
@@ -115,7 +91,7 @@ public class crudapplication extends javax.swing.JFrame {
                 jLabel5MouseClicked(evt);
             }
         });
-        jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 170, 40));
+        jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 170, 40));
 
         jSeparator1.setBackground(new java.awt.Color(0, 0, 0));
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
@@ -215,31 +191,11 @@ public class crudapplication extends javax.swing.JFrame {
     jDesktopPane1.add(ad).setVisible(true);
     }//GEN-LAST:event_formWindowOpened
 
-    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
-      jDesktopPane1.removeAll();
-    editapplication ed = new editapplication();
-    jDesktopPane1.add(ed).setVisible(true);
-    }//GEN-LAST:event_jLabel3MouseClicked
-
-    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
-    jDesktopPane1.removeAll();
-    deleteapplication dl = new deleteapplication();
-    jDesktopPane1.add(dl).setVisible(true);   
-    }//GEN-LAST:event_jLabel4MouseClicked
-
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
-        admindashboard adm = new admindashboard();  
+
         userdashboard udm = new userdashboard();
-        Session sess = Session.getInstance();   
-        String role = sess.getRole();
-        System.out.println(""+role);
-        if("ADMIN".equals(role)){
         udm.setVisible(true);
         this.dispose();
-        } else{
-        adm.setVisible(true);
-        this.dispose();
-        }
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
@@ -271,14 +227,46 @@ public class crudapplication extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(crudapplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(crudapplicationuser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(crudapplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(crudapplicationuser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(crudapplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(crudapplicationuser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(crudapplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(crudapplicationuser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -315,7 +303,7 @@ public class crudapplication extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new crudapplication().setVisible(true);
+                new crudapplicationuser().setVisible(true);
             }
         });
     }
@@ -325,8 +313,6 @@ public class crudapplication extends javax.swing.JFrame {
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
